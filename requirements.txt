@@ -1,7 +1,0 @@
-apt-get install python3.6
-pip3 install virtualenv
-virtualenv venv
-source venv/bin/activate
-pip3 install django
-pip3 install pillow
-pip3 install django-crispy-forms
