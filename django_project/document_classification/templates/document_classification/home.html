@@ -1,8 +1,5 @@
 {% extends "document_classification/base.html" %}
 {% block content %}
-
-
-<body>
   <!-- Header -->
   <header class="bg-primary py-5 mb-5">
     <div class="container h-100">
@@ -24,7 +21,7 @@
         <hr>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deserunt neque tempore recusandae animi soluta quasi? Asperiores rem dolore eaque vel, porro, soluta unde debitis aliquam laboriosam. Repellat explicabo, maiores!</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio neque consectetur consequatur magni in nisi, natus beatae quidem quam odit commodi ducimus totam eum, alias, adipisci nesciunt voluptate. Voluptatum.</p>
-        <a class="btn btn-primary btn-lg" href="{% url 'document_classification-choose_classifier' %}">Explore &raquo;</a>
+        <a class="btn btn-primary btn-lg" href="{% url 'document_classification-choose_model' %}">Explore &raquo;</a>
       </div>
       <div class="col-md-4 mb-5">
         <h2>Contact Us</h2>
@@ -96,9 +93,4 @@
     </div>
     <!-- /.container -->
   </footer>
-
-
-</body>
-
-</html>
 {% endblock content %}

@@ -8,9 +8,9 @@ def home(request):
     
     return render(request, 'document_classification/home.html')
 
-def choose_classifier(request):
+def choose_model(request):
     
-    return render(request, 'document_classification/choose_classifier.html')
+    return render(request, 'document_classification/choose_model.html')
 
 def import_data_type(request):
     
