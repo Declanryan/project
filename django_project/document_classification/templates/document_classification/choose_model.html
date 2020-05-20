@@ -1,5 +1,37 @@
 {% extends "document_classification/base.html" %}
 {% block content %}
-	<h1>hello form choose model</h1>
-  <a class="btn btn-primary btn-lg" href="{% url 'document_classification-import_data_type' %}">Continue &raquo;</a>
+<h3 class="text-center">Setup</h3>
+<p class="text-center">Choose Model</p>
+<!--- first card --->
+  <div class="container">
+  <div class="card-deck">
+    <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
+      <div class="card-body text-center">
+        <p class="card-text">Classification</p>
+        <p class="card-text">Some more text to increase the height</p>
+        <p class="card-text">Some more text to increase the height</p>
+        <p class="card-text">Some more text to increase the height</p>
+        <a href="{% url 'document_classification-import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select</a>
+      </div>
+    </div>
+    <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
+      <div class="card-body text-center">
+        <p class="card-text">Future Option 2</p>
+        <a href="{% url 'document_classification-import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select</a>
+      </div>
+    </div>
+    <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
+      <div class="card-body text-center">
+        <p class="card-text">Future Option 3</p>
+        <a href="{% url 'document_classification-import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select</a>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<br />
+<br />
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="width: 10%;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">10%</div>
+</div>
 {% endblock content %}

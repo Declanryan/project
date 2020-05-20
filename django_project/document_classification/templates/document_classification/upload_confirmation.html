@@ -1,25 +1,14 @@
 {% extends "document_classification/base.html" %}
 {% block content %}
-	<div class="container center">
-		<div class="row">
-		  <div class="col-sm-4">
-		    <div class="card">
-		      <div class="card-block">
-		        <h3 class="card-title">Special title treatment</h3>
-		        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-		        <a href="#" class="btn btn-primary">Go somewhere</a>
-		      </div>
-		    </div>
-		  </div>
-		  <div class="col-sm-4">
-		    <div class="card">
-		      <div class="card-block">
-		        <h3 class="card-title">Special title treatment</h3>
-		        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-		        <a href="#" class="btn btn-primary">Go somewhere</a>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-  	</div>
+<h3 class="text-center" style="color:blue; font-weight:bold;">Setup</h3>
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+</div>
+<p class="text-center" style="font-weight:bold;">Confirmation</p>
+<div class="jumbotron">
+  <h1 class="display-4">Upload Confirmation!</h1>
+  <p class="lead">This is a confimation screen for uploading files.</p>
+  <hr class="my-4">
+  <a class="btn btn-primary btn-lg" href="{% url 'document_classification-tag_selection' %}" role="button">Continue</a>
+</div>
 {% endblock content %}

@@ -26,7 +26,7 @@ def preview_data(request):
 
 def results_page(request):
     
-    return render(request, 'document_classification/reults_page.html')
+    return render(request, 'document_classification/results_page.html')
 
 def setup_complete(request):
     

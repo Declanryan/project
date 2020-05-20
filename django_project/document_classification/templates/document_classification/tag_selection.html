@@ -1,13 +1,18 @@
 {% extends "document_classification/base.html" %}
 {% block content %}
+<h3 class="text-center" style="color:blue; font-weight:bold;">Training</h3>
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
+</div>
+<p class="text-center" style="font-weight:bold;">Tag Selection</p>
 	<div class="container center">
 		<div class="row">
 		  <div class="col-sm-4">
 		    <div class="card">
 		      <div class="card-block">
-		        <h3 class="card-title">Special title treatment</h3>
+		        <h3 class="card-title">hello tag selection</h3>
 		        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-		        <a href="#" class="btn btn-primary">Go somewhere</a>
+		        <a href="{% url 'document_classification-model_name' %}" class="btn btn-primary">Go somewhere</a>
 		      </div>
 		    </div>
 		  </div>
