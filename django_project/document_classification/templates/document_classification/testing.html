@@ -5,26 +5,41 @@
   <div class="progress-bar" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">90%</div>
 </div>
 <p class="text-center" style="font-weight:bold;">Build Run</p>
-	<div class="container center">
-		<div class="row">
-		  <div class="col-sm-4">
-		    <div class="card">
-		      <div class="card-block">
-		        <h3 class="card-title">hello testing</h3>
-		        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-		        <a href="{% url 'document_classification-results_page' %}" class="btn btn-primary">Go somewhere</a>
-		      </div>
-		    </div>
-		  </div>
-		  <div class="col-sm-4">
-		    <div class="card">
-		      <div class="card-block">
-		        <h3 class="card-title">Special title treatment</h3>
-		        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-		        <a href="#" class="btn btn-primary">Go somewhere</a>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-  	</div>
+	<p class="text-center" style="font-weight:bold;">Please choose the dataset for testing.</p>
+<div class="card mx-auto bg-steel text-light md-6 mb-5" style="max-width: 30rem; max-height: 22rem;">
+  	<div class="card-body">
+	    <form> 
+              
+            <!-- Starts label tag from here -->
+            <label for = "Upload Test Data"> 
+                Upload Test Data
+            </label> 
+            <input type = "radio" name = "Occupation" 
+            id = "upload" value = "upload"><br> 
+      
+            <label for = "Use Test Set"> 
+                Use Test Set
+            </label> 
+            <input type = "radio" name = "Occupation"
+            id = "test" value = "test"><br> 
+      
+            <label for = "other"> 
+                Other 
+            </label> 
+            <!-- Ends label tags here -->
+              
+            <input type = "radio" name = "Occupation"
+            id = "other" value = "other"> 
+        </form> 
+	    <div class="row mx-auto">
+	    	<div>
+	  			<a href="{% url 'document_classification-tag_selection' %}" class="btn btn-primary ">Training</a>
+	  		</div>
+	  		<div>
+				<a href="{% url 'document_classification-testing' %}" class="btn btn-success">Testing</a>
+	  		</div>
+	  </div>
+  </div>
+  	<a href="{% url 'document_classification-results_page' %}" class="btn btn-primary">Continue</a>
+</div>
 {% endblock content %}
