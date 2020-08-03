@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
-from .forms import tag_selection_form, model_name_selection_form
-
+from .forms import tag_selection_form, model_name_selection_form, upload_file_form
+from .models import Documents
 
 def home(request): 
     return render(request, 'document_classification/home.html')
@@ -26,7 +26,8 @@ def model_name(request):
         return render(request, 'document_classification/model_name.html', {'form': form})
 
 def preview_data(request):
-    return render(request, 'document_classification/preview_data.html')
+    docs = Documents.objects.all()
+    return render(request, 'document_classification/preview_data.html', {'docs':docs})
 
 def results_page(request):
     return render(request, 'document_classification/results_page.html')
@@ -56,5 +57,18 @@ def upload_confirmation(request):
     return render(request, 'document_classification/upload_confirmation.html')
 
 def upload_file(request):
-    return render(request, 'document_classification/upload_file.html')
+    if request.method == 'POST':
+        form = upload_file_form(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('document_classification-preview_data')
+    else:
+        form = upload_file_form()
+    return render(request, 'document_classification/upload_file.html', {'form': form})
+    
 
+def delete_docs(request, pk):
+    if request.method == 'POST':
+        doc = Documents.objects.get(pk=pk)
+        doc.delete()
+    return redirect('document_classification-preview_data')

@@ -46,7 +46,7 @@ urlpatterns = [
          ),
          name='password_reset_complete'),
     path('', include('document_classification.urls')),   
-    path('blog', include('blog.urls')),
+    path('', include('blog.urls')),
 ]
 
 

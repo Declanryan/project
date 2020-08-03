@@ -1,4 +1,5 @@
 from django import forms
+from .models import Documents
 
 class tag_selection_form(forms.Form):
     tag1 = forms.CharField(label='Tag 1', max_length=20)
@@ -10,3 +11,7 @@ class tag_selection_form(forms.Form):
 class model_name_selection_form(forms.Form):
 	name = forms.CharField(label='Model Name', max_length=20)
 	
+class upload_file_form(forms.ModelForm):
+    class Meta:
+        model = Documents
+        fields = ('description', 'document')

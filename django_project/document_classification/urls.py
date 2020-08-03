@@ -15,4 +15,5 @@ urlpatterns = [
     path('testing', views.testing, name='document_classification-testing'),
     path('upload_confirmation', views.upload_confirmation, name='document_classification-upload_confirmation'),
     path('upload_file', views.upload_file, name='document_classification-upload_file'),
+    path('documents/<int:pk>', views.delete_docs, name='document_classification-delete_docs'),
 ]

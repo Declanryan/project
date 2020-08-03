@@ -5,14 +5,42 @@
 <div class="progress">
   <div class="progress-bar" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%</div>
 </div>
-<p class="text-center">Data preview</p>
-<!---first card --->
-	<div class="card mx-auto text-light bg-steel lg-10" style="max-width: 60rem;">
-  <div class="card-body">
-  	<img src="http://placehold.it/800x300" alt="data/head">
-    <h5 class="card-title">preview of data head or image</h5>
- 
-  </div>
+<h2>Document</h2>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>No</th>
+			<th>Description</th>
+			<th>Uploaded_at</th>
+			<th>Document</th>
+			<th>View</th>
+			<th>Delete</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		{% for doc in docs%}
+		<tr>
+			<td>{{ doc.pk }}</td>
+			<td>{{ doc.description }}</td>
+			<td>{{ doc.uploaded_at }}</td>
+			<td>{{ doc.document }}</td>
+			<td>
+				<a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank">
+				view</a>
+			</td>
+			<td>
+				<form method="post" action="{% url 'document_classification-delete_docs' doc.pk %}">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+				</form>
+					
+			</td>
+		</tr>
+		{% endfor%}
+	</tbody>	
+</table>
   <a href="{% url 'document_classification-upload_confirmation' %}" class="btn mx-auto btn-block btn-primary" style="max-width: 10rem;">Continue</a>
 </div>
 {% endblock content %}

@@ -1,0 +1,26 @@
+Dec 12, 2019 1:45:27 AM net.sourceforge.ganttproject.GPLogger log
+INFO: Options file:C:\Users\dryan\.ganttproject
+Dec 12, 2019 1:45:28 AM net.sourceforge.ganttproject.GPLogger log
+INFO: Waiting until main window closes
+Dec 12, 2019 1:45:28 AM net.sourceforge.ganttproject.GPLogger log
+INFO: Deleting old auto-save files
+Dec 12, 2019 1:45:31 AM net.sourceforge.ganttproject.GPLogger log
+INFO: Bounds stored in the  options: java.awt.Rectangle[x=-8,y=-8,width=1296,height=696]
+Dec 12, 2019 1:45:31 AM net.sourceforge.ganttproject.GPLogger log
+INFO: Bounds after setVisible: java.awt.Rectangle[x=-8,y=-8,width=1296,height=696]
+Dec 12, 2019 1:45:32 AM net.sourceforge.ganttproject.GPLogger log
+INFO: Bounds after opening: java.awt.Rectangle[x=-8,y=-8,width=1296,height=696]
+Dec 12, 2019 1:45:32 AM net.sourceforge.ganttproject.GPLogger log
+INFO: Bounds stored in the  options: java.awt.Rectangle[x=-8,y=-8,width=1296,height=696]
+Dec 12, 2019 1:45:37 AM org.ganttproject.impex.htmlpdf.itext.ITextEngine$2 run
+INFO: Scanning font directories...
+Dec 12, 2019 1:45:37 AM org.ganttproject.impex.htmlpdf.fonts.TTFontCache registerDirectory
+INFO: scanning directory=C:\Program Files\Java\jre1.8.0_231/lib/fonts
+Dec 12, 2019 1:45:37 AM org.ganttproject.impex.htmlpdf.fonts.TTFontCache registerDirectory
+INFO: scanning directory=C:/windows/fonts
+Dec 12, 2019 1:45:39 AM net.sourceforge.ganttproject.GPLogger log
+INFO: [GanttOptions] save(): finished!!
+Dec 12, 2019 1:45:39 AM net.sourceforge.ganttproject.GPLogger log
+INFO: Main window has closed
+Dec 12, 2019 1:45:40 AM net.sourceforge.ganttproject.GPLogger log
+INFO: Program terminated
