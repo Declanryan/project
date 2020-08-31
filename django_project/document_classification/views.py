@@ -54,7 +54,14 @@ def home(request):
     return render(request, 'document_classification/home.html')
 
 def upload_confirmation(request):
-    return render(request, 'document_classification/upload_confirmation.html')
+    if request.method == 'POST':
+        form = upload_file_form(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('document_classification-preview_data')
+    else:
+        form = upload_file_form()
+    return render(request, 'document_classification/upload_confirmation.html', {'form': form})
 
 def upload_file(request):
     if request.method == 'POST':
