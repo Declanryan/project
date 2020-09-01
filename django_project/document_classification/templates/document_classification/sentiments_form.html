@@ -1,0 +1,17 @@
+{% extends "document_classification/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!--- heading and progress bar --->
+<h3 class="text-center" style="color:blue; font-weight:bold;">Sentiment Analysis</h3>
+<!---- card --->
+<div class="card mx-auto text-light bg-steel mb-3" style="max-width: 30rem;">
+	<div class="card-body">
+		<form method="post">
+		{% csrf_token %}
+		{{ form|crispy}}
+		<button type="submit" class="btn btn-primary">Analyze</button>
+		</form>
+	</div>
+<a href="{% url 'document_classification-preview_data' %}" class="btn btn-block btn-primary">File Select</a>
+</div>
+{% endblock content %}

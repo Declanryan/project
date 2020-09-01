@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
-from .forms import tag_selection_form, model_name_selection_form, upload_file_form
+from .forms import tag_selection_form, model_name_selection_form, upload_file_form, sentiments_form
 from .models import Documents
-
+from doc_api.apps import sample_predict
 def home(request): 
     return render(request, 'document_classification/home.html')
 
@@ -65,6 +65,19 @@ def upload_file(request):
     else:
         form = upload_file_form()
     return render(request, 'document_classification/upload_file.html', {'form': form})
+
+def check_sentiment(request):
+    if request.method == 'POST':
+        form = sentiments_form(request.POST)
+        if form.is_valid():
+            form.save()
+            sample_pred_text = form.cleaned_data.get('text')
+            predictions = sample_predict(sample_pred_text, pad=True)
+            messages.success(request, f'model name created for {predictions}!')
+            return redirect('document_classification-preview_data')
+    else:
+        form = sentiments_form()
+    return render(request, 'document_classification/sentiments_form.html', {'form': form})   
     
 
 def delete_docs(request, pk):

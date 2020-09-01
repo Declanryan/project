@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Documents
+from .models import Documents, Sentiments
 
 admin.site.register(Documents)
-# Register your models here.
+admin.site.register(Sentiments)
