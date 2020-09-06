@@ -18,7 +18,7 @@ class Documents(models.Model):
     	super().delete(*args, **kwargs)
 
     def extract(self, *args, **kwargs):
-    	self.
+    	pass
 
 
 class Sentiments(models.Model):

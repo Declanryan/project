@@ -4,6 +4,8 @@ from django.contrib import messages
 from .forms import tag_selection_form, model_name_selection_form, upload_file_form, sentiments_form
 from .models import Documents
 from doc_api.apps import DocApiConfig
+import boto3
+from botocore.config import Config
 def home(request): 
     return render(request, 'document_classification/home.html')
 
@@ -96,5 +98,16 @@ def delete_docs(request, pk):
 def extract_doc(request, pk):
     if request.method == 'POST':
         doc = Documents.objects.get(pk=pk)
-        doc.delete()
-    return redirect('document_classification-preview_data')
+        #documentName = str(doc.document)
+        documentName = "awesome-effects.png"
+        print(documentName)
+        s3BucketName = 'AWS_STORAGE_BUCKET_NAME'
+        my_config = Config(
+        region_name = 'eu-west-1', signature_version = 'v4',
+        retries = {'max_attempts': 10, 'mode': 'standard'})
+        textract = boto3.client('textract', config=my_config)
+        response = textract.detect_document_text(Document={
+        'S3Object': {'Bucket': s3BucketName,'Name': documentName}})
+        print(response)
+        
+    
