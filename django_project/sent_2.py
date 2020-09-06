@@ -1,7 +1,9 @@
+# declar imports
 import tensorflow_datasets as tfds
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+# define plot function
 def plot_graphs(history, metric):
   plt.plot(history.history[metric])
   plt.plot(history.history['val_'+metric], '')
@@ -10,46 +12,46 @@ def plot_graphs(history, metric):
   plt.legend([metric, 'val_'+metric])
   plt.show()
 
-dataset, info = tfds.load('imdb_reviews/subwords8k', with_info=True,
-                          as_supervised=True)
-train_dataset, test_dataset = dataset['train'], dataset['test']
+# load dataset from tensorflow datasets
+dataset, info = tfds.load('imdb_reviews/subwords8k', with_info=True, as_supervised=True)
+print("dataset size: {}".format(len(dataset)))
 
+# split data into train and test
+train_dataset, test_dataset = dataset['train'], dataset['test']
+print("Training entries: {}, test entries: {}".format(len(train_dataset), len(test_dataset)))
+
+# define the text encoder
 encoder = info.features['text'].encoder
 
+# prints out the size of the vocab
 print('Vocabulary size: {}'.format(encoder.vocab_size))
 
-sample_string = 'Hello TensorFlow.'
-
-encoded_string = encoder.encode(sample_string)
-print('Encoded string is {}'.format(encoded_string))
-
-original_string = encoder.decode(encoded_string)
-print('The original string: "{}"'.format(original_string))
-
-assert original_string == sample_string
-
-for index in encoded_string:
-  print('{} ----> {}'.format(index, encoder.decode([index])))
-
+# set the buffer and batch size
 BUFFER_SIZE = 10000
 BATCH_SIZE = 64
 
-train_dataset = train_dataset.shuffle(BUFFER_SIZE)
-train_dataset = train_dataset.padded_batch(BATCH_SIZE)
 
+train_dataset = train_dataset.shuffle(BUFFER_SIZE)
+
+# padded_batch method to zero-pad the sequences to the length of the longest string in the batch:
+train_dataset = train_dataset.padded_batch(BATCH_SIZE)
 test_dataset = test_dataset.padded_batch(BATCH_SIZE)
 
 model = tf.keras.Sequential([
-    tf.keras.layers.Embedding(encoder.vocab_size, 64),
+	# embedding layer stores one vector per word.
+    tf.keras.layers.Embedding(encoder.vocab_size, 64, mask_zero=True),# embedding layer stores one vector per word.
+    # A bidirectional lstm rnn layer that will pass the input
+    # forward and backward through the rnn layer to learn long range word dependencies.
     tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(64)),
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(1)
 ])
 
+# Compile the model
 model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
               optimizer=tf.keras.optimizers.Adam(1e-4),
               metrics=['accuracy'])
-
+# insert the data into the model for training
 history = model.fit(train_dataset, epochs=10,
                     validation_data=test_dataset, 
                     validation_steps=30)

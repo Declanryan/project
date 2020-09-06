@@ -13,7 +13,7 @@ print("GPU is", "available" if tf.config.list_physical_devices('GPU') else "NOT 
 #Download dataset and split into train and test.
 train_data, test_data = tfds.load(name="imdb_reviews", split=["train", "test"], 
                                   batch_size=-1, as_supervised=True)
-# Split each set into exaples and labels.
+# Split each set into examples and labels.
 train_examples, train_labels = tfds.as_numpy(train_data)
 test_examples, test_labels = tfds.as_numpy(test_data)
 

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,14 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+
+AWS_ACCESS_KEY_ID = 'AKIAQV65VS7EYEQHDMV4'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME ='doc-sort-file-upload'
+
+AWS_S3_REGION_NAME = 'eu-west-1'
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

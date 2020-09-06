@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from .forms import tag_selection_form, model_name_selection_form, upload_file_form, sentiments_form
 from .models import Documents
-from doc_api.apps import sample_predict
+from doc_api.apps import DocApiConfig
 def home(request): 
     return render(request, 'document_classification/home.html')
 
@@ -77,9 +77,9 @@ def check_sentiment(request):
     if request.method == 'POST':
         form = sentiments_form(request.POST)
         if form.is_valid():
-            form.save()
+            # form.save()
             sample_pred_text = form.cleaned_data.get('text')
-            predictions = sample_predict(sample_pred_text, pad=True)
+            predictions = DocApiConfig.sample_predict(sample_pred_text, pad=True)
             messages.success(request, f'model name created for {predictions}!')
             return redirect('document_classification-preview_data')
     else:
