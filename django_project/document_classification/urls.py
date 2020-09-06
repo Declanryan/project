@@ -17,4 +17,6 @@ urlpatterns = [
     path('upload_file', views.upload_file, name='document_classification-upload_file'),
     path('sentiments_form', views.check_sentiment, name='document_classification-sentiments_form'),
     path('documents/<int:pk>', views.delete_docs, name='document_classification-delete_docs'),
+    path('extract_documents/<int:pk>', views.extract_docs, name='document_classification-extract_docs'),
+
 ]

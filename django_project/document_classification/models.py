@@ -17,6 +17,10 @@ class Documents(models.Model):
     	self.document.delete()
     	super().delete(*args, **kwargs)
 
+    def extract(self, *args, **kwargs):
+    	self.
+
+
 class Sentiments(models.Model):
 	title = models.CharField(max_length=20)
 	text = models.CharField(max_length=500)

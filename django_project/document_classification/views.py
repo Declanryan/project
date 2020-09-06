@@ -92,3 +92,9 @@ def delete_docs(request, pk):
         doc = Documents.objects.get(pk=pk)
         doc.delete()
     return redirect('document_classification-preview_data')
+
+def extract_doc(request, pk):
+    if request.method == 'POST':
+        doc = Documents.objects.get(pk=pk)
+        doc.delete()
+    return redirect('document_classification-preview_data')
