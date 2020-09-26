@@ -15,7 +15,9 @@ urlpatterns = [
     path('testing', views.testing, name='document_classification-testing'),
     path('upload_confirmation', views.upload_confirmation, name='document_classification-upload_confirmation'),
     path('upload_file', views.upload_file, name='document_classification-upload_file'),
-    path('sentiments_form', views.check_sentiment, name='document_classification-sentiments_form'),
+    path('extract_upload_file', views.extract_upload_file, name='document_classification-extract_upload_file'),
+    path('extract_preview_file', views.extract_preview_file, name='document_classification-extract_preview_file'),
+    path('display_extracted_text', views.display_extracted_text, name='document_classification-display_extracted_text'),
     path('documents/<int:pk>', views.delete_docs, name='document_classification-delete_docs'),
     path('extract_documents/<int:pk>', views.extract_doc, name='document_classification-extract_doc'),
 

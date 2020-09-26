@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import Documents, Sentiments
+from .models import Classification_Documents
 
-admin.site.register(Documents)
-admin.site.register(Sentiments)
+admin.site.register(Classification_Documents)

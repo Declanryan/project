@@ -29,6 +29,8 @@ ALLOWED_HOSTS = ['192.168.0.192','localhost', '127.0.0.1']
 INSTALLED_APPS = [
     'doc_api.apps.DocApiConfig',
     'document_classification',
+    'document_sentiment',
+    'document_indexing',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
     'crispy_forms',
@@ -81,6 +83,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '3306',  
     }
 }
 

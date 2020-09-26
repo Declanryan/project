@@ -1,0 +1,56 @@
+{% extends "document_sentiment/base.html" %}
+{% block content %}
+{% load static %}
+
+<h2>Document-{{ request.user.username}}</h2>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>No</th>
+			<th>User</th>
+			<th>Description</th>
+			<th>Uploaded_at</th>
+			<th>Document</th>
+			<th>View</th>
+			<th>Delete</th>
+			<th>Extract</th>
+
+			
+
+		</tr>
+	</thead>
+	<tbody>
+		{% for doc in docs%}
+		<tr>
+			<td>{{ doc.pk }}</td>
+			<td>{{ doc.author }}</td>
+			<td>{{ doc.description }}</td>
+			<td>{{ doc.uploaded_at }}</td>
+			<td>{{ doc.document }}</td>
+			<td>
+				<a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank">
+				view</a>
+			</td>
+			<td>
+				<form method="post" action="{% url 'document_classification-delete_docs' doc.pk %}">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+				</form>
+					
+			</td>
+			<td>
+				<form method="post" action="{% url 'document_classification-extract_doc' doc.pk %}">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-success btn-sm">Extract</button>
+				</form>
+					
+			</td>
+			
+		</tr>
+		{% endfor%}
+	</tbody>	
+</table>
+  <a href="{% url 'document_classification-upload_confirmation' %}" class="btn mx-auto btn-block btn-primary" style="max-width: 10rem;">Continue</a>
+</div>
+{% endblock content %}

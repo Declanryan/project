@@ -1,5 +1,5 @@
 from django import forms
-from .models import Documents, Sentiments
+from .models import Classification_Documents
 
 class tag_selection_form(forms.Form):
     tag1 = forms.CharField(label='Tag 1', max_length=20)
@@ -13,11 +13,5 @@ class model_name_selection_form(forms.Form):
 	
 class upload_file_form(forms.ModelForm):
     class Meta:
-        model = Documents
+        model = Classification_Documents
         fields = ('description', 'document')
-
-class sentiments_form(forms.ModelForm):
-    text  = forms.CharField(widget=forms.Textarea)
-    class Meta:
-        model = Sentiments
-        fields = ('title', 'text', 'author')

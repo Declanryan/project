@@ -1,11 +1,12 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import tag_selection_form, model_name_selection_form, upload_file_form, sentiments_form
-from .models import Documents
-from doc_api.apps import DocApiConfig
+from .forms import tag_selection_form, model_name_selection_form, upload_file_form
+from .models import Classification_Documents
 import boto3
 from botocore.config import Config
+import time
+
 def home(request): 
     return render(request, 'document_classification/home.html')
 
@@ -28,8 +29,12 @@ def model_name(request):
         return render(request, 'document_classification/model_name.html', {'form': form})
 
 def preview_data(request):
-    docs = Documents.objects.all()
+    docs = Classification_Documents.objects.filter(author=request.user)
     return render(request, 'document_classification/preview_data.html', {'docs':docs})
+
+def extract_preview_file(request):
+    docs = Classification_Documents.objects.filter(author=request.user)
+    return render(request, 'document_classification/extract_preview_file.html', {'docs':docs})
 
 def results_page(request):
     return render(request, 'document_classification/results_page.html')
@@ -55,19 +60,22 @@ def testing(request):
 def home(request): 
     return render(request, 'document_classification/home.html')
 
-def upload_confirmation(request):
+def extract_upload_file(request):
     if request.method == 'POST':
         form = upload_file_form(request.POST, request.FILES)
+        form.instance.author = request.user
         if form.is_valid():
             form.save()
-            return redirect('document_classification-preview_data')
+            return redirect('document_classification-extract_preview_file')
     else:
         form = upload_file_form()
-    return render(request, 'document_classification/upload_confirmation.html', {'form': form})
+    return render(request, 'document_classification/extract_upload_file.html', {'form': form})
+
 
 def upload_file(request):
     if request.method == 'POST':
         form = upload_file_form(request.POST, request.FILES)
+        form.instance.author = request.user
         if form.is_valid():
             form.save()
             return redirect('document_classification-preview_data')
@@ -75,39 +83,116 @@ def upload_file(request):
         form = upload_file_form()
     return render(request, 'document_classification/upload_file.html', {'form': form})
 
-def check_sentiment(request):
+
+def upload_confirmation(request):
     if request.method == 'POST':
-        form = sentiments_form(request.POST)
+        form = upload_file_form(request.POST, request.FILES)
+
         if form.is_valid():
-            # form.save()
-            sample_pred_text = form.cleaned_data.get('text')
-            predictions = DocApiConfig.sample_predict(sample_pred_text, pad=True)
-            messages.success(request, f'model name created for {predictions}!')
+            form.save()
             return redirect('document_classification-preview_data')
     else:
-        form = sentiments_form()
-    return render(request, 'document_classification/sentiments_form.html', {'form': form})   
-    
+        form = upload_file_form()
+    return render(request, 'document_classification/upload_confirmation.html', {'form': form})
 
 def delete_docs(request, pk):
     if request.method == 'POST':
-        doc = Documents.objects.get(pk=pk)
+        doc = Classification_Documents.objects.get(pk=pk)
         doc.delete()
     return redirect('document_classification-preview_data')
 
 def extract_doc(request, pk):
     if request.method == 'POST':
-        doc = Documents.objects.get(pk=pk)
-        #documentName = str(doc.document)
-        documentName = "awesome-effects.png"
-        print(documentName)
-        s3BucketName = 'AWS_STORAGE_BUCKET_NAME'
+        doc = Classification_Documents.objects.get(pk=pk)
+        documentName = str(doc.document)
         my_config = Config(
         region_name = 'eu-west-1', signature_version = 'v4',
         retries = {'max_attempts': 10, 'mode': 'standard'})
         textract = boto3.client('textract', config=my_config)
         response = textract.detect_document_text(Document={
-        'S3Object': {'Bucket': s3BucketName,'Name': documentName}})
-        print(response)
+        'S3Object': {'Bucket': "doc-sort-file-upload",'Name': documentName}})
+        for item in response["Blocks"]:
+            if item["BlockType"] == "LINE":
+
+                print (item["Text"])
+    return redirect('document_classification-display_extracted_text')
+
+def display_extracted_text(request):
+    pass
         
-    
+def extract_pdf_docs(request, pk):
+    if request.method == 'POST':
+        # Document
+        doc = Classification_Documents.objects.get(pk=pk)
+        documentName = str(doc.document)
+        s3BucketName = "doc-sort-file-upload"
+
+        def startJob(s3BucketName, objectName):
+            response = None
+            client = boto3.client('textract')
+            response = client.start_document_text_detection(
+            DocumentLocation={
+                'S3Object': {
+                    'Bucket': s3BucketName,
+                    'Name': objectName
+                }
+            })
+            return response["JobId"]
+
+        def isJobComplete(jobId):
+            time.sleep(5)
+            client = boto3.client('textract')
+            response = client.get_document_text_detection(JobId=jobId)
+            status = response["JobStatus"]
+            print("Job status: {}".format(status))
+
+            while(status == "IN_PROGRESS"):
+                time.sleep(5)
+                response = client.get_document_text_detection(JobId=jobId)
+                status = response["JobStatus"]
+                print("Job status: {}".format(status))
+
+            return status
+
+        def getJobResults(jobId):
+
+            pages = []
+
+            time.sleep(5)
+
+            client = boto3.client('textract')
+            response = client.get_document_text_detection(JobId=jobId)
+            
+            pages.append(response)
+            print("Resultset page recieved: {}".format(len(pages)))
+            nextToken = None
+            if('NextToken' in response):
+                nextToken = response['NextToken']
+
+            while(nextToken):
+                time.sleep(5)
+
+                response = client.get_document_text_detection(JobId=jobId, NextToken=nextToken)
+
+                pages.append(response)
+                print("Resultset page recieved: {}".format(len(pages)))
+                nextToken = None
+                if('NextToken' in response):
+                    nextToken = response['NextToken']
+
+            return pages
+
+
+
+    jobId = startJob(s3BucketName, documentName)
+    print("Started job with id: {}".format(jobId))
+    if(isJobComplete(jobId)):
+        response = getJobResults(jobId)
+
+    # Print detected text
+    for resultPage in response:
+        for item in resultPage["Blocks"]:
+            if item["BlockType"] == "LINE":
+                print ('\033[94m' +  item["Text"] + '\033[0m')
+
+    return redirect('document_classification-preview_data')

@@ -48,6 +48,8 @@ urlpatterns = [
     path('', include('document_classification.urls')),   
     path('', include('blog.urls')),
     path('', include('doc_api.urls')),
+    path('', include('document_indexing.urls')),
+    path('', include('document_sentiment.urls')),
 ]
 
 
