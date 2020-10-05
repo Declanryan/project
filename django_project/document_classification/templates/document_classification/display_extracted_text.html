@@ -7,14 +7,59 @@
 	<h3 class="text-center">Setup</h3>
 <p class="text-center">Data Import</p>
 <!---first card --->
-	<div class="card mx-auto text-light bg-steel mb-3" style="max-width: 30rem;">
-  <div class="card-body">
-  <form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form|crispy}}
-  <button type="submit" class="btn btn-primary">Upload</button>
-  </form>
-  </div>
-  <a href="{% url 'document_classification-extract_preview_file' %}" class="btn btn-block btn-primary">Continue</a>
+ <div class="row">
+      <div class="col-md-4">
+        <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 30rem;">
+          <div class="card-body">
+            <div class="form-group shadow-textarea">
+            <label for="FormControlTextarea">Extracted text sample</label>
+            <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="10" placeholder="{{ extracted_text }}" readonly></textarea>
+            </div>
+             <a class="btn btn-primary mr-10" href="{% url 'document_classification-choose_model' %}">Topic extraction &raquo;</a>
+    
+  
+      <a class="btn btn-primary" href="{% url 'document_classification-choose_model' %}">Add Labels &raquo;</a>
+          </div>
+    
+        </div>
+      </div>
+      <div class="col-md-3 ">
+        <table class="table">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Uploaded_at</th>
+      <th>Document</th>
+      <th>View</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for doc in docs%}
+    <tr> 
+      <td>{{ doc.description }}</td>
+      <td>{{ doc.uploaded_at }}</td>
+      <td>{{ doc.document }}</td>
+      <td>
+        <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank">view</a>
+      </td>
+      <td>
+        <form method="post" action="{% url 'document_classification-delete_docs' doc.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+          
+      </td>
+    </tr>
+    {% endfor%}
+  </tbody>  
+
+</table>
+<div class="row">
+  <a class="btn btn-primary" href="{% url 'document_classification-choose_model' %}">&laquo; Extract More</a>
 </div>
+      </div>
+    </div>
+    </div>
+<!--- --->
 {% endblock content %}
