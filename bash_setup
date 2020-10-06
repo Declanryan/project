@@ -1,17 +1,15 @@
-// start dependencys
 
-cd my_project
-sudo apt-get update && apt-get upgrade
+
+sudo apt-get update
+sudo apt-get upgrade
 
 sudo apt-get install python3.6
 pip3 install virtualenv
 virtualenv venv
 source venv/bin/activate
-pip3 install django
-pip3 install pillow
-pip3 install django-crispy-forms
 
-// end dependencys
+pip3 install -r requirements.txt
+
 
 django-admin startproject django_project
 python manage.py startapp blog
