@@ -8,22 +8,21 @@
 <p class="text-center">Data Import</p>
 <!---first card --->
  <div class="row">
-      <div class="col-md-4">
-        <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 30rem;">
+      <div class="col-md-6">
+        <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
           <div class="card-body">
             <div class="form-group shadow-textarea">
-            <label for="FormControlTextarea">Extracted text sample</label>
-            <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="10" placeholder="{{ extracted_text }}" readonly></textarea>
+            <label for="FormControlTextarea" >Extracted text sample</label>
+            <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="10" placeholder="{{ request.session.content }}" readonly></textarea>
             </div>
-             <a class="btn btn-primary mr-10" href="{% url 'document_classification-choose_model' %}">Topic extraction &raquo;</a>
-    
-  
-      <a class="btn btn-primary" href="{% url 'document_classification-choose_model' %}">Add Labels &raquo;</a>
+              <a class="btn btn-primary" href="{% url 'document_classification-extract_preview_file' %}">&laquo; Extract More</a>
+              <a class="btn btn-primary" href="{% url 'document_classification-topic_extraction' %}">Topic extraction &raquo;</a>
+              <a class="btn btn-primary" href="{% url 'document_classification-tag_selection' %}">Add Labels &raquo;</a>
           </div>
     
         </div>
       </div>
-      <div class="col-md-3 ">
+      <div class="col-md-4 ">
         <table class="table">
   <thead>
     <tr>
@@ -41,7 +40,7 @@
       <td>{{ doc.uploaded_at }}</td>
       <td>{{ doc.document }}</td>
       <td>
-        <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank">view</a>
+        <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank">Download</a>
       </td>
       <td>
         <form method="post" action="{% url 'document_classification-delete_docs' doc.pk %}">
@@ -55,9 +54,6 @@
   </tbody>  
 
 </table>
-<div class="row">
-  <a class="btn btn-primary" href="{% url 'document_classification-choose_model' %}">&laquo; Extract More</a>
-</div>
       </div>
     </div>
     </div>

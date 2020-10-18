@@ -60,7 +60,7 @@ ROOT_URLCONF = 'django_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['document_sentiment/static/document_sentiment'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

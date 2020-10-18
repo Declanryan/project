@@ -20,5 +20,6 @@ urlpatterns = [
     path('display_extracted_text', views.display_extracted_text, name='document_classification-display_extracted_text'),
     path('documents/<int:pk>', views.delete_docs, name='document_classification-delete_docs'),
     path('extract_documents/<int:pk>', views.extract_doc, name='document_classification-extract_doc'),
+    path('topic_extraction', views.topic_extraction, name='document_classification-topic_extraction'),
 
 ]

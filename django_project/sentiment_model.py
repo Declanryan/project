@@ -1,16 +1,8 @@
 # declare imports
 import tensorflow_datasets as tfds
 import tensorflow as tf
-import matplotlib.pyplot as plt
 
-# define plot function
-def plot_graphs(history, metric):
-  plt.plot(history.history[metric])
-  plt.plot(history.history['val_'+metric], '')
-  plt.xlabel("Epochs")
-  plt.ylabel(metric)
-  plt.legend([metric, 'val_'+metric])
-  plt.show()
+
 
 # load dataset from tensorflow datasets
 dataset, info = tfds.load('imdb_reviews/subwords8k', with_info=True, as_supervised=True)
@@ -21,7 +13,7 @@ train_dataset, test_dataset = dataset['train'], dataset['test']
 print("Training entries: {}, test entries: {}".format(len(train_dataset), len(test_dataset)))
 
 # define the text encoder
-encoder = info.features['text'].encoder
+encoder = hub.load("https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3")
 
 # print out the size of the vocab
 print('Vocabulary size: {}'.format(encoder.vocab_size))
@@ -94,4 +86,3 @@ sample_pred_text = ('The movie was cool. The animation and the graphics '
 predictions = sample_predict(sample_pred_text, pad=True)
 print(predictions)
 
-plot_graphs(history, 'accuracy')
