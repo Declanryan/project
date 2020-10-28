@@ -10,6 +10,8 @@ from botocore.config import Config
 import time
 from collections import OrderedDict
 from .fusioncharts import FusionCharts
+import spacy
+from spacy import displacy
 # Create your views here.
 
 def import_data_type(request):
@@ -52,6 +54,7 @@ def check_sentiment(request):
             form.save()
             messages.success(request, f'The detected sentiment is {predictions}!')
             request.session['result'] = result
+            request.session['sample_pred_text'] = sample_pred_text
             return redirect('document_sentiment-sentiment_results_page')          
     else:
         form = sentiments_form()
@@ -66,20 +69,41 @@ def delete_docs(request, pk):
 
 def sentiment_results_page(request):
     result = request.session['result']# define result
-    print(result)
-    '''dataSource = OrderedDict()
-    dataSource["data"] = []
+    sample_pred_text = request.session['sample_pred_text']
+
+    # start spacy_doc
+    # Load English tokenizer, tagger, parser, NER and word vectors
+    nlp = spacy.load("en_core_web_md")
+
+    # Process whole documents
+    text = (sample_pred_text)
+    doc = nlp(text)
+    doc_result = ""
+    # Analyze syntax
+    print("Noun phrases:", [chunk.text for chunk in doc.noun_chunks])
+    print("Verbs:", [token.lemma_ for token in doc if token.pos_ == "VERB"])
+
+    # Find named entities, phrases and concepts
+    #for entity in doc.ents:
+     #   print(entity.text, entity.label_)
+
+    # end spacy_doc
+    #---------------------------------------------------------------
+
+    # begin chart
+    chart_dataSource = OrderedDict()
+    chart_dataSource["data"] = []
      # The data for the chart should be in an array wherein each element of the array  is a JSON object having the `label` and `value` as keys.
 
-    dataSource["data"].append({"label": 'Venezuela', "value": '290'})
-    dataSource["data"].append({"label": 'Saudi', "value": '290'})
-    dataSource["data"].append({"label": 'Canada', "value": '180'})
-    dataSource["data"].append({"label": 'Iran', "value": '140'})
-    dataSource["data"].append({"label": 'Russia', "value": '115'})
-    dataSource["data"].append({"label": 'Russia', "value": '115'})
-    dataSource["data"].append({"label": 'UAE', "value": '100'})
-    dataSource["data"].append({"label": 'US', "value": '30'})
-    dataSource["data"].append({"label": 'China', "value": '30'})
+    chart_dataSource["data"].append({"label": 'Venezuela', "value": '290'})
+    chart_dataSource["data"].append({"label": 'Saudi', "value": '290'})
+    chart_dataSource["data"].append({"label": 'Canada', "value": '180'})
+    chart_dataSource["data"].append({"label": 'Iran', "value": '140'})
+    chart_dataSource["data"].append({"label": 'Russia', "value": '115'})
+    chart_dataSource["data"].append({"label": 'Russia', "value": '115'})
+    chart_dataSource["data"].append({"label": 'UAE', "value": '100'})
+    chart_dataSource["data"].append({"label": 'US', "value": '30'})
+    chart_dataSource["data"].append({"label": 'China', "value": '30'})
 
     # The `chartConfig` dict contains key-value pairs of data for chart attribute
 
@@ -89,27 +113,23 @@ def sentiment_results_page(request):
     chartConfig["xAxisName"] = "Country"
     chartConfig["yAxisName"] = "Reserves (MMbbl)"
     chartConfig["numberSuffix"] = "K"
-    chartConfig["theme"] = "fusion"
+    chartConfig["theme"] = "candy"
 
-    dataSource["chart"] = chartConfig
-# Create an object for the column 2D chart using the FusionCharts class constructor
-# The chart data is passed to the `dataSource` parameter.
+    chart_dataSource["chart"] = chartConfig
+    # Create an object for the column 2D chart using the FusionCharts class constructor
+    # The chart data is passed to the `chart_dataSource` parameter.
     
-    column2D = FusionCharts("column2d", "myFirstChart", "600", "400", "myFirstchart-container", "json", dataSource)
-    #form = sentiments_form(request.POST)
+    column2D = FusionCharts("column2d", "myFirstChart", "450", "270", "chart-1", "json", chart_dataSource)
     
-    #sample_pred_text = form.cleaned_data.get('text')
-    #predictions = DocumentSentimentConfig.sample_predict(sample_pred_text, pad=True)
-    #form.sentiment = predictions
-    #form.save()
-    messages.success(request, f'The detected sentiment is {result}!')
-    return render(request, 'document_sentiment/sentiment_results_page.html', {'output': column2D.render()})'''         
+    # end chart
+    #-------------------------------------------------------------
 
+    # begin gauge
     #Load dial indicator values from simple string array# e.g.dialValues = ["52", "10", "81", "95"]
     dialValues = [result]
 
     # widget data is passed to the `dataSource` parameter, as dict, in the form of key-value pairs.
-    dataSource = OrderedDict()
+    gauge_dataSource = OrderedDict()
 
     # The `widgetConfig` dict contains key-value pairs of data for widget attribute
     widgetConfig = OrderedDict()
@@ -144,9 +164,9 @@ def sentiment_results_page(request):
     dialData = OrderedDict()
     dialData["dial"] = []
 
-    dataSource["chart"] = widgetConfig
-    dataSource["colorRange"] = colorRangeData
-    dataSource["dials"] = dialData
+    gauge_dataSource["chart"] = widgetConfig
+    gauge_dataSource["colorRange"] = colorRangeData
+    gauge_dataSource["dials"] = dialData
 
     # Iterate through the data in `dialValues` and insert into the `dialData["dial"]` list.
     # The data for the `dial`should be in an array wherein each element of the
@@ -156,8 +176,9 @@ def sentiment_results_page(request):
         "value": dialValues[i]
     })
     # Create an object for the angular-gauge using the FusionCharts class constructor
-    # The widget data is passed to the `dataSource` parameter.
-    angulargaugeWidget = FusionCharts("angulargauge", "ex1", "450", "270", "myFirstwidget-container", "json", dataSource)
+    # The widget data is passed to the `gauge_dataSource` parameter.
+    angulargaugeWidget = FusionCharts("angulargauge", "ex1", "450", "270", "gauge-1", "json", gauge_dataSource)
+    # end gauge
 
     # returning complete JavaScript and HTML code, which is used to generate widget in the browsers.
-    return render(request, 'document_sentiment/sentiment_results_page.html', {'output' : angulargaugeWidget.render()})
+    return render(request, 'document_sentiment/sentiment_results_page.html', {'gauge_output' : angulargaugeWidget.render(), 'chart_output': column2D.render(), 'spacy_output' : doc, 'displacy_output':displacy.parse_deps(doc)})

@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     
     path('', views.home, name='document_classification-home'),
+    path('price_plan', views.price_plan, name='document_classification-price_plan'),
     path('choose_model', views.choose_model, name='document_classification-choose_model'),
     path('import_data_type', views.import_data_type, name='document_classification-import_data_type'),
     path('model_name', views.model_name, name='document_classification-model_name'),

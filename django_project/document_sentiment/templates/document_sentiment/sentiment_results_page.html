@@ -1,7 +1,37 @@
 {% extends "document_sentiment/base.html" %}
 {% block content %}
-<h3 class="text-center" style="color:blue; font-weight:bold;">Results Page</h3>
-	<div class="row">
-      <div id="myFirstwidget-container">{{ output|safe }}</div>
+		<div class="row">
+			<div id="mySidenav" class="sidenav">
+			  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+			  <a href="#">About</a>
+			  <a href="#">Services</a>
+			  <a href="#">Clients</a>
+			  <a href="#">Contact</a>
+			</div>
+    	<div class="row">	
+            		
+            			<textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ spacy_output|safe }}" readonly></textarea>
+            		</div>
+    	<div class="row">
+    		
+            			
+            			<textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ displacy_output|safe }}" readonly></textarea>
+            		</div>
+    </div>
+    <div class="col-4">
+    	<div class="row">
+      		 
+            			<div id="gauge-1">{{ gauge_output|safe }}</div>
+            		
+    		
+    	</div>
+    	
+            		
+            			<div id="chart-1">{{ chart_output|safe }}</div>
+            		
+    		</div>
+  		</div>
   </div>
+		</div>
+
 {% endblock content %}

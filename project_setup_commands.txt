@@ -1,0 +1,27 @@
+#new setup
+sudo apt-get update && sudo apt-get upgrade
+sudo apt install python3
+sudo apt install python3-pip
+git clone https://github.com/Declanryan/project.git
+cd project
+sudo apt install virtualenv
+virtualenv -p python3 myenv
+source venv/bin/activate
+pip install -r requirements.txt.
+cd django_project
+python3 manage.py runserver
+
+
+# create requirements.txt
+$ pip freeze > requirements.txt#
+show the file's contents
+$ cat requirements.txt
+
+<-- git commands -->
+#git commands
+#setup gloal user name
+git config --global user.name "Declan Ryan"
+#setup global user email
+git config --global user.email "dryan005@hotmail.com"
+#check version
+git --version

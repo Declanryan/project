@@ -17,6 +17,9 @@ from gensim.models import Word2Vec
 def home(request): 
     return render(request, 'document_classification/home.html')
 
+def price_plan(request): 
+    return render(request, 'document_classification/price_plans.html')
+
 def choose_model(request):
     return render(request, 'document_classification/choose_model.html')
 
@@ -63,9 +66,6 @@ def tag_selection(request):
 
 def testing(request): 
     return render(request, 'document_classification/testing.html')
-
-def home(request): 
-    return render(request, 'document_classification/home.html')
 
 def extract_upload_file(request):
     if request.method == 'POST':
