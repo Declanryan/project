@@ -54,12 +54,11 @@ def setup_complete(request):
 
 def tag_selection(request):
     if request.method == 'POST':
+        labels_list =[]
         form = tag_selection_form(request.POST)
         if form.is_valid():
-            # form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'tag_selection created for {username}!')
-            return redirect('document_classification/model_name.html')
+            labels_list.extend('Tag0, Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7, Tag8, Tag9')
+            return redirect('document_classification/results_page.html')
     else:
         form = tag_selection_form()
         return render(request, 'document_classification/tag_selection.html', {'form': form})
@@ -121,11 +120,12 @@ def check_extension(filename):
         return '.other'
 
 def extract_doc(request, pk):
-    if request.method == 'POST':
+    if request.method == 'POST':# check for post request
         doc = Classification_Documents.objects.get(pk=pk)# get the document ref from the database
         documentName = str(doc.document)# get the real name of the doc
         ext = check_extension(documentName)
-        if ext == '.pdf':
+        if ext == '.pdf': # check if doc is a pdf
+            extract_doc_name = append_name(documentName, "extracted")# create new name for extracted doc
             content = extract_pdf_docs(request, pk)
             request.session['content'] = content
             s3 = boto3.resource('s3')        
@@ -201,12 +201,15 @@ def extract_pdf_docs(request, pk):
             response = client.get_document_text_detection(JobId=jobId)
             status = response["JobStatus"]
             print("Job status: {}".format(status))
+            messages.success(request, f'Job status: {status}!')
 
             while(status == "IN_PROGRESS"):
                 time.sleep(5)
                 response = client.get_document_text_detection(JobId=jobId)
                 status = response["JobStatus"]
                 print("Job status: {}".format(status))
+                messages.success(request, f'Job status: {status}!')
+
 
             return status
 
@@ -221,6 +224,8 @@ def extract_pdf_docs(request, pk):
             
             pages.append(response)
             print("Resultset page recieved: {}".format(len(pages)))
+            messages.success(request, f'Resultset page recieved: {len(pages)}!')
+
             nextToken = None
             if('NextToken' in response):
                 nextToken = response['NextToken']
@@ -230,6 +235,7 @@ def extract_pdf_docs(request, pk):
                 response = client.get_document_text_detection(JobId=jobId, NextToken=nextToken)
                 pages.append(response)
                 print("Resultset page recieved: {}".format(len(pages)))
+                messages.success(request, f'Resultset page recieved: {len(pages)}!')
                 nextToken = None
                 if('NextToken' in response):
                     nextToken = response['NextToken']
@@ -238,6 +244,7 @@ def extract_pdf_docs(request, pk):
 
         jobId = startJob(s3BucketName, documentName)
         print("Started job with id: {}".format(jobId))
+        messages.success(request, f'Started job with id: {jobId}!')
         if(isJobComplete(jobId)):
             response = getJobResults(jobId)
 
@@ -253,6 +260,7 @@ def extract_pdf_docs(request, pk):
         s3.Object('doc-sort-file-upload', extract_doc_name).put(Body=content)
         extraxt_doc = Classification_Documents(username=request.user, description='extracted text', document=extract_doc_name, author=request.user)
         extraxt_doc.save()
+        messages.success(request, f'Document etraction and upload complete')
         return content
     else:
         messages.error(request, f'unable to extract text!')
