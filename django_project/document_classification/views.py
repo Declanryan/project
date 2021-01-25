@@ -58,7 +58,7 @@ def tag_selection(request):
         form = tag_selection_form(request.POST)
         if form.is_valid():
             labels_list.extend('Tag0, Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7, Tag8, Tag9')
-            return redirect('document_classification/results_page.html')
+            return redirect('document_classification-results_page')
     else:
         form = tag_selection_form()
         return render(request, 'document_classification/tag_selection.html', {'form': form})
@@ -201,14 +201,14 @@ def extract_pdf_docs(request, pk):
             response = client.get_document_text_detection(JobId=jobId)
             status = response["JobStatus"]
             print("Job status: {}".format(status))
-            messages.success(request, f'Job status: {status}!')
+            messages.info(request, f'Job status: {status}!')
 
             while(status == "IN_PROGRESS"):
                 time.sleep(5)
                 response = client.get_document_text_detection(JobId=jobId)
                 status = response["JobStatus"]
                 print("Job status: {}".format(status))
-                messages.success(request, f'Job status: {status}!')
+                messages.info(request, f'Job status: {status}!')
 
 
             return status
@@ -224,7 +224,7 @@ def extract_pdf_docs(request, pk):
             
             pages.append(response)
             print("Resultset page recieved: {}".format(len(pages)))
-            messages.success(request, f'Resultset page recieved: {len(pages)}!')
+            messages.info(request, f'Resultset page recieved: {len(pages)}!')
 
             nextToken = None
             if('NextToken' in response):
@@ -235,7 +235,7 @@ def extract_pdf_docs(request, pk):
                 response = client.get_document_text_detection(JobId=jobId, NextToken=nextToken)
                 pages.append(response)
                 print("Resultset page recieved: {}".format(len(pages)))
-                messages.success(request, f'Resultset page recieved: {len(pages)}!')
+                messages.info(request, f'Resultset page recieved: {len(pages)}!')
                 nextToken = None
                 if('NextToken' in response):
                     nextToken = response['NextToken']
@@ -244,11 +244,11 @@ def extract_pdf_docs(request, pk):
 
         jobId = startJob(s3BucketName, documentName)
         print("Started job with id: {}".format(jobId))
-        messages.success(request, f'Started job with id: {jobId}!')
+        messages.info(request, f'Started job with id: {jobId}!')
         if(isJobComplete(jobId)):
             response = getJobResults(jobId)
 
-        # Add detected text to a file
+        # Add detected text as content
         for resultPage in response:
             for item in resultPage["Blocks"]:
                 if item["BlockType"] == "LINE":
