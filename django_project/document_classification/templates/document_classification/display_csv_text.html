@@ -1,0 +1,40 @@
+{% extends "document_classification/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="progress">
+  <div class="progress-bar" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">30%</div>
+</div>
+	<h3 class="text-center">Setup</h3>
+<p class="text-center">Data Import</p>
+<!---first card --->
+ <div class="row">
+      <div class="col-md-6">
+        <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
+          <div class="card-body">
+            <div class="form-group shadow-textarea">
+            <label for="FormControlTextarea" >Extracted text sample</label>
+            <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="10" placeholder="{{request.session.content }}" readonly></textarea>
+            </div>
+          </div>
+          <div>
+              <form method="post" action="{% url 'document_classification-csv_preview_file' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">&laquo; Add More</button>
+              </form>
+              <div>
+              <form method="post" action="{% url 'document_classification-topic_extraction' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-sm" style="float:right;">Topic extraction &raquo;</button>
+              </form>
+            </div>
+          </div>
+    
+        </div>
+      </div>
+    {% for key, value in request.session.content.items %}
+            <li><a href="{{key}}">{{value}}</a></li>
+          {% endfor %}
+    </div>
+    </div>
+    {% endblock content %}
+<!--- --->

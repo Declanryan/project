@@ -4,12 +4,12 @@ from django.contrib import messages
 from django.http import HttpResponse
 from .forms import upload_file_form, sentiments_form
 from .models import Sentiment_Documents
-from .apps import DocumentSentimentConfig
 import boto3
 from botocore.config import Config
 import time
 from collections import OrderedDict
 from .fusioncharts import FusionCharts
+import stanza
 import spacy
 from spacy import displacy
 # Create your views here.
@@ -48,11 +48,16 @@ def check_sentiment(request):
         form = sentiments_form(request.POST)
         if form.is_valid():
             sample_pred_text = form.cleaned_data.get('text')
-            predictions = DocumentSentimentConfig.sample_predict(sample_pred_text, pad=True)
-            result = int(predictions[0][0] * 100)
+            # predictions = DocumentSentimentConfig.sample_predict(sample_pred_text, pad=True)
+            # result = int(predictions[0][0] * 100)
+            nlp = stanza.Pipeline(lang='en', processors='tokenize,sentiment')
+            doc = nlp(sample_pred_text)
+            for i, sentence in enumerate(doc.sentences):
+                print(i, sentence.sentiment)
+                result = sentence.sentiment
             form.sentiment = result
             form.save()
-            messages.success(request, f'The detected sentiment is {predictions}!')
+            messages.success(request, f'The detected sentiment is {result}!')
             request.session['result'] = result
             request.session['sample_pred_text'] = sample_pred_text
             return redirect('document_sentiment-sentiment_results_page')          

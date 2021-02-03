@@ -73,13 +73,10 @@ gensim_lda_model = datapath("saved_models/classification_model")
 lda_model.save('saved_models/classification_model/gensim_lda_model.gensim')
 pprint(lda_model.print_topics(num_words=10))
 
-lda = LdaModel.load('saved_models/classification_model/gensim_lda_model.gensim')
+lda = gensim_lda_model.load('saved_models/classification_model/gensim_lda_model.gensim')
 
  # Create a new corpus, made of previously unseen documents.
->>> other_texts = [
-     ['computer', 'time', 'graph'],
-     ['survey', 'response', 'eps'],
-     ['human', 'system', 'computer']]
+other_texts = [['computer', 'time', 'graph'], ['survey', 'response', 'eps'], ['human', 'system', 'computer']]
 other_corpus = [common_dictionary.doc2bow(text) for text in other_texts]
 unseen_doc = other_corpus[0]
 vector = lda[unseen_doc]  # get topic probability distribution for a document

@@ -9,8 +9,7 @@ from rest_framework import permissions
 from . serializers import UserSerializer, GroupSerializer, sentiment_Serializers
 from . models import sentiment
 import numpy as np
-import tensorflow as tf
-from tensorflow import keras
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
