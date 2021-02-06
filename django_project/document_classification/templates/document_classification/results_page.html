@@ -1,40 +1,108 @@
 {% extends "document_classification/base.html" %}
 {% block content %}
-<h3 class="text-center" style="color:blue; font-weight:bold;">Results Page</h3>
-	<div class="row">
-      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-      <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawVisualization);
 
-        function drawVisualization() {
-          // Some raw data (not necessarily accurate)
-          var data = google.visualization.arrayToDataTable([
-            ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
-            ['2004/05',  165,      938,         522,             998,           450,      614.6],
-            ['2005/06',  135,      1120,        599,             1268,          288,      682],
-            ['2006/07',  157,      1167,        587,             807,           397,      623],
-            ['2007/08',  139,      1110,        615,             968,           215,      609.4],
-            ['2008/09',  136,      691,         629,             1026,          366,      569.6]
-          ]);
 
-          var options = {
-            title : 'Monthly Coffee Production by Country',
-            vAxis: {title: 'Cups'},
-            hAxis: {title: 'Month'},
-            seriesType: 'bars',
-            series: {5: {type: 'line'}}
-          };
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawVisualization);
+  google.charts.setOnLoadCallback(drawChart);
 
-          var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
-          chart.draw(data, options);
-        }
-    </script>
-      <div class="col-md-4 mb-5">
-        <div class="form-group shadow-textarea">
-            <label for="FormControlTextarea" >Extracted text sample</label>
-            <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="10" placeholder="{{request.session.content }}" readonly></textarea>
-            </div>
+  function drawVisualization() {
+    // Some raw data (not necessarily accurate)
+    var data = google.visualization.arrayToDataTable([
+      ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
+      ['2004/05',  165,      938,         522,             998,           450,      614.6],
+      ['2005/06',  135,      1120,        599,             1268,          288,      682],
+      ['2006/07',  157,      1167,        587,             807,           397,      623],
+      ['2007/08',  139,      1110,        615,             968,           215,      609.4],
+      ['2008/09',  136,      691,         629,             1026,          366,      569.6]
+    ]);
+
+    var options = {
+      title : 'Monthly Coffee Production by Country',
+      vAxis: {title: 'Cups'},
+      hAxis: {title: 'Month'},
+      seriesType: 'bars',
+      series: {5: {type: 'line'}}
+    };
+
+    var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+  }
+
+  function drawChart() {
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Topping');
+    data.addColumn('number', 'Slices');
+    data.addRows([
+      ['Mushrooms', 3],
+      ['Onions', 1],
+      ['Olives', 1],
+      ['Zucchini', 1],
+      ['Pepperoni', 2]
+    ]);
+
+  var piechart_options = {title:'Pie Chart: How Much Pizza I Ate Last Night',
+                 width:400,
+                 height:300};
+  var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+  piechart.draw(data, piechart_options);
+
+  var barchart_options = {title:'Barchart: How Much Pizza I Ate Last Night',
+                 width:400,
+                 height:300,
+                 legend: 'none'};
+  var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+  barchart.draw(data, barchart_options);
+}
+</script>
+<div class="container-fluid">
+ 
+  <div class="row">
+    <div class="col-2">
+      <div class="content-section">
+            <h3>Sidebar</h3>
+            <p class='text-muted'>TODO.
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
+            </ul>
+            </p>
+          </div>
+    </div>
+    <div class="col-3">           
+      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ spacy_output|safe }}" readonly></textarea>
+      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ displacy_output|safe }}" readonly></textarea>           
+    </div>
+    <div class="col-5">        
+      <td><div id="piechart_div" style="border: 1px solid #ccc"></div></td>
+    <td><div id="barchart_div" style="border: 1px solid #ccc"></div></td>      
     </div>
   </div>
+</div>
+      
+    <!--Div that will hold the pie chart
+    <div id="chart_div"></div>
+<table class="columns">
+  <tr>
+    
+    <td><div id="piechart_div" style="border: 1px solid #ccc"></div></td>
+    <td><div id="barchart_div" style="border: 1px solid #ccc"></div></td>
+  </tr>
+  </tr>
+</table>-->
+
+  
 {% endblock content %}

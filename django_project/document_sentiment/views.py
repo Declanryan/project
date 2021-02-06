@@ -6,42 +6,35 @@ from .forms import upload_file_form, sentiments_form
 from .models import Sentiment_Documents
 import boto3
 from botocore.config import Config
-import time
+import time, os, sys
 from collections import OrderedDict
+import pandas as pd
 from .fusioncharts import FusionCharts
 import stanza
 import spacy
 from spacy import displacy
-# Create your views here.
+from io import StringIO
+from pprint import pprint
 
-def import_data_type(request):
-    return render(request, 'document_sentiment/import_data_type.html')
+def sentiment_import_data_type(request):
+    return render(request, 'document_sentiment/sentiment_import_data_type.html')
 
-def upload_confirmation(request):
-    if request.method == 'POST':
-        form = upload_file_form(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('document_sentiment-preview_data')
-    else:
-        form = upload_file_form()
-    return render(request, 'document_sentiment/upload_confirmation.html', {'form': form})
-
-def upload_file(request):
+def sentiment_upload_file(request):
     if request.method == 'POST':
         form = upload_file_form(request.POST, request.FILES)
         form.instance.author = request.user
+        print (form.instance.author)
         if form.is_valid():
            
             form.save()
-            return redirect('document_sentiment-preview_data')
+            return redirect('document_sentiment-sentiment_preview_data')
     else:
         form = upload_file_form()
-    return render(request, 'document_sentiment/upload_file.html', {'form': form})
+    return render(request, 'document_sentiment/sentiment_upload_file.html', {'form': form})
 
-def preview_data(request):
-    docs = Sentiment_Documents.objects.filter(author=request.user)
-    return render(request, 'document_sentiment/preview_data.html', {'docs':docs})
+def sentiment_preview_data(request):
+    docs = Sentiment_Documents.objects.filter(author=request.user.id)
+    return render(request, 'document_sentiment/sentiment_preview_data.html', {'docs':docs})
 
 def check_sentiment(request):
     if request.method == 'POST':
@@ -57,13 +50,102 @@ def check_sentiment(request):
                 result = sentence.sentiment
             form.sentiment = result
             form.save()
-            messages.success(request, f'The detected sentiment is {result}!')
+            if result == 0:
+                result_str = "Negative" 
+            elif result == 1:
+                result_str = "Neutral"
+            else:
+                result_str = "Positive"
+            messages.success(request, f'The detected sentiment is {result_str}!')
             request.session['result'] = result
             request.session['sample_pred_text'] = sample_pred_text
             return redirect('document_sentiment-sentiment_results_page')          
     else:
         form = sentiments_form()
-    return render(request, 'document_sentiment/sentiments_form.html', {'form': form})   
+    return render(request, 'document_sentiment/sentiments_form.html', {'form': form})
+
+def check_sentiment_csv(request):
+    if request.method == 'POST':
+        request.session['pk'] = pk        
+        doc = Sentiment_Documents.objects.get(pk=pk)# get the document ref from the database
+        documentName = str(doc.document)# get the real name of the doc     
+        aws_id = os.environ.get('AWS_ACCESS_KEY_ID')
+        aws_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
+        REGION = 'eu-west-1'
+        client = boto3.client('s3', region_name = REGION, aws_access_key_id=aws_id,
+                aws_secret_access_key=aws_secret)
+        bucket_name = "doc-sort-file-upload"
+        object_key = documentName
+        csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
+        body = csv_obj['Body']
+        csv_string = body.read().decode('utf-8')
+        data = pd.read_csv(StringIO(csv_string))
+        for row in data['content']:
+            print (row)
+
+def sentiment_preview_data_file(request):
+    docs = Sentiment_Documents.objects.filter(author=request.user.id)
+    return render(request, 'document_sentiment/sentiment_preview_data_file.html', {'docs':docs})
+
+def check_file(request, pk, filename):
+    name, ext = os.path.splitext(filename)# split the filename
+
+    if ext == '.csv':
+        request.session['pk'] = pk        
+        doc = Sentiment_Documents.objects.get(pk=pk)# get the document ref from the database
+        documentName = str(doc.document)# get the real name of the doc     
+        aws_id = os.environ.get('AWS_ACCESS_KEY_ID')
+        aws_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
+        REGION = 'eu-west-1'
+        client = boto3.client('s3', region_name = REGION, aws_access_key_id=aws_id,
+                aws_secret_access_key=aws_secret)
+        bucket_name = "doc-sort-file-upload"
+        object_key = documentName
+        csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
+        body = csv_obj['Body']
+        csv_string = body.read().decode('utf-8')
+        data = pd.read_csv(StringIO(csv_string))
+        content = data.head().to_dict()
+        pprint(content)
+        request.session['content'] = content
+        return '.csv'
+
+    elif ext == '.txt':
+        request.session['pk'] = pk        
+        doc = Sentiment_Documents.objects.get(pk=pk)# get the document ref from the database
+        documentName = str(doc.document)# get the real name of the doc     
+        aws_id = os.environ.get('AWS_ACCESS_KEY_ID')
+        aws_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
+        REGION = 'eu-west-1'
+        client = boto3.client('s3', region_name = REGION, aws_access_key_id=aws_id,
+                aws_secret_access_key=aws_secret)
+        bucket_name = "doc-sort-file-upload"
+        object_key = documentName
+        csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
+        body = csv_obj['Body']
+        content = body.read().decode('utf-8')
+        # content = file.read().replace("\n", " ")
+        pprint(content)
+        request.session['content'] = content
+        return '.txt'
+
+    else:
+        return '.other'
+
+
+def sentiment_select_doc(request, pk):
+    if request.method == 'POST':# check for post request
+        doc = Sentiment_Documents.objects.get(pk=pk)# get the document ref from the database
+        documentName = str(doc.document)# get the real name of the doc
+        ext = check_file(request, pk, documentName)
+        if ext == '.other': # check if doc is unsupported format
+            messages.error(request, f'Please use an extracted file format such as .txt, .csv or begin extraction process on a new file')
+            return redirect('document_sentiment-sentiment_preview_data')
+        else:
+            return redirect('document_sentiment-sentiment_preview_data_file')
+    else:
+        messages.error(request, f'unable to process file')
+    return render(request, 'document_sentiment-sentiment_preview_data.html')   
     
 
 def delete_docs(request, pk):
@@ -76,7 +158,6 @@ def sentiment_results_page(request):
     result = request.session['result']# define result
     sample_pred_text = request.session['sample_pred_text']
 
-    # start spacy_doc
     # Load English tokenizer, tagger, parser, NER and word vectors
     nlp = spacy.load("en_core_web_md")
 
@@ -140,9 +221,9 @@ def sentiment_results_page(request):
     widgetConfig = OrderedDict()
     widgetConfig["caption"] = "Result of sentiment analysis"
     widgetConfig["lowerLimit"] = "0"
-    widgetConfig["upperLimit"] = "100"
+    widgetConfig["upperLimit"] = "2"
     widgetConfig["showValue"] = "1"
-    widgetConfig["numberSuffix"] = "%"
+    widgetConfig["numberSuffix"] = ""
     widgetConfig["theme"] = "candy"
     widgetConfig["showToolTip"] = "0"
 
@@ -150,17 +231,17 @@ def sentiment_results_page(request):
     colorRangeData = OrderedDict()
     colorRangeData["color"] = [{
             "minValue": "0",
-            "maxValue": "50",
+            "maxValue": "0.66",
             "code": "#F2726F"
         },
         {
-            "minValue": "50",
-            "maxValue": "75",
+            "minValue": "0.66",
+            "maxValue": "1.33",
             "code": "#FFC533"
         },
         {
-            "minValue": "75",
-            "maxValue": "100",
+            "minValue": "1.33",
+            "maxValue": "2",
             "code": "#62B58F"
         }
     ]

@@ -15,6 +15,7 @@
 			<th>View</th>
 			<th>Delete</th>
 			<th>Extract</th>
+			<th>Select</th>
 
 			
 
@@ -42,7 +43,14 @@
 			<td>
 				<form method="post" action="{% url 'document_classification-extract_doc' doc.pk %}">
 					{% csrf_token %}
-					<button type="submit" class="btn btn-success btn-sm">Extract</button>
+					<button type="submit" class="btn btn-info btn-sm">Extract</button>
+				</form>
+					
+			</td>
+			<td>
+				<form method="post" action="{% url 'document_classification-select_doc' doc.pk %}">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-success btn-sm">Select</button>
 				</form>
 					
 			</td>
@@ -51,7 +59,7 @@
 		{% endfor%}
 		</div class="row">
       <a class="btn btn-primary" href="{% url 'document_classification-extract_upload_file' %}">&laquo; Upload</a>
-      <a class="btn btn-primary" href="{% url 'document_classification-display_extracted_text' %}">Extraction Sample &raquo;</a>
+      <a class="btn btn-primary" href="{% url 'document_classification-display_extracted_text' %}" style="float:right;">View Sample &raquo;</a>
   </div>
 	</tbody>	
 </table>

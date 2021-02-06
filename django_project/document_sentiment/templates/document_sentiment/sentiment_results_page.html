@@ -25,12 +25,12 @@
           </div>
 		</div>
 		<div class="col-3">		    		
-			<textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ spacy_output|safe }}" readonly></textarea>
-			<textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ displacy_output|safe }}" readonly></textarea>		    		
+			<textarea class="form-control z-depth-5" id="FormControlTextarea" style="border: 1px solid #ccc" rows="11" placeholder="{{ spacy_output|safe }}" readonly></textarea>
+			<textarea class="form-control z-depth-5" id="FormControlTextarea" style="border: 1px solid #ccc" rows="11" placeholder="{{ displacy_output|safe }}" readonly></textarea>		    		
 		</div>
 		<div class="col-5">				 
-			<div id="gauge-1">{{ gauge_output|safe }}</div>	
-			<div id="chart-1">{{ chart_output|safe }}</div>		    		
+			<div id="gauge-1" style="border: 1px solid #ccc">{{ gauge_output|safe }}</div>	
+			<div id="chart-1" style="border: 1px solid #ccc">{{ chart_output|safe }}</div>		    		
 		</div>
 	</div>
 </div>

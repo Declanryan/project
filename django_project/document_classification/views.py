@@ -148,11 +148,72 @@ def check_extension(filename):
     else:
         return '.other'
 
+def check_file(request, pk, filename):
+    name, ext = os.path.splitext(filename)# split the filename
+
+    if ext == '.csv':
+        request.session['pk'] = pk        
+        doc = Classification_Documents.objects.get(pk=pk)# get the document ref from the database
+        documentName = str(doc.document)# get the real name of the doc     
+        aws_id = os.environ.get('AWS_ACCESS_KEY_ID')
+        aws_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
+        REGION = 'eu-west-1'
+        client = boto3.client('s3', region_name = REGION, aws_access_key_id=aws_id,
+                aws_secret_access_key=aws_secret)
+        bucket_name = "doc-sort-file-upload"
+        object_key = documentName
+        csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
+        body = csv_obj['Body']
+        csv_string = body.read().decode('utf-8')
+        data = pd.read_csv(StringIO(csv_string))
+        content = data.head().to_dict()
+        pprint(content)
+        request.session['content'] = content
+        return '.csv'
+
+    elif ext == '.txt':
+        request.session['pk'] = pk        
+        doc = Classification_Documents.objects.get(pk=pk)# get the document ref from the database
+        documentName = str(doc.document)# get the real name of the doc     
+        aws_id = os.environ.get('AWS_ACCESS_KEY_ID')
+        aws_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
+        REGION = 'eu-west-1'
+        client = boto3.client('s3', region_name = REGION, aws_access_key_id=aws_id,
+                aws_secret_access_key=aws_secret)
+        bucket_name = "doc-sort-file-upload"
+        object_key = documentName
+        csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
+        body = csv_obj['Body']
+        content = body.read().decode('utf-8')
+        # content = file.read().replace("\n", " ")
+        pprint(content)
+        request.session['content'] = content
+        return '.txt'
+
+    else:
+        return '.other'
+
+
+def select_doc(request, pk):
+    if request.method == 'POST':# check for post request
+        doc = Classification_Documents.objects.get(pk=pk)# get the document ref from the database
+        documentName = str(doc.document)# get the real name of the doc
+        ext = check_file(request, pk, documentName)
+        if ext == '.other': # check if doc is unsupported format
+            messages.error(request, f'Please use an extracted file format such as .txt, .csv or begin extraction process on a new file')
+            return redirect('document_classification-extract_preview_file')
+        else:
+            return redirect('document_classification-display_extracted_text')
+    else:
+        messages.error(request, f'unable to process file')
+    return render(request, 'document_classification-extract_preview_file.html')
+    
+
 def extract_doc(request, pk):
     if request.method == 'POST':# check for post request
         doc = Classification_Documents.objects.get(pk=pk)# get the document ref from the database
         documentName = str(doc.document)# get the real name of the doc
-        ext = check_extension(documentName)
+        ext = check_file(documentName)
         if ext == '.pdf': # check if doc is a pdf
             extract_doc_name = append_name(documentName, "extracted")# create new name for extracted doc
             content = extract_pdf_docs(request, pk)
@@ -185,6 +246,7 @@ def extract_doc(request, pk):
     else:
         messages.error(request, f'unable to extract text!')
     return render(request, 'document_classification-extract_preview_file.html')
+
 
 def display_extracted_text(request):
     docs = Classification_Documents.objects.filter(author=request.user.id, document__contains="extracted")

@@ -43,9 +43,9 @@
         <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank">Download</a>
       </td>
       <td>
-        <form method="post" action="{% url 'document_classification-delete_docs' doc.pk %}">
+        <form method="post" action="{% url 'document_classification-select_doc' doc.pk %}">
           {% csrf_token %}
-          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          <button type="submit" class="btn btn-danger btn-sm">Select</button>
         </form>
           
       </td>
