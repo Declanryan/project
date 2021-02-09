@@ -37,9 +37,9 @@
 				view</a>
 			</td>
 			<td>
-				<form method="post" action="{% url 'document_sentiment-delete_docs' doc.pk %}">
+				<form method="post" action="{% url 'document_sentiment-sentiment_delete_docs' doc.pk %}">
 					{% csrf_token %}
-					<button type="submit" class="btn btn-danger btn-sm">Deleted</button>
+					<button type="submit" class="btn btn-danger btn-sm">Delete</button>
 				</form>
 					
 			</td>
@@ -57,8 +57,8 @@
 </table>
 </div>
 </div>
-<a class="btn btn-primary" href="{% url 'document_classification-csv_upload_file' %}">&laquo; Upload</a>
-      <a class="btn btn-primary" href="{% url 'document_classification-display_csv_text' %}" style="float:right;">View Sample &raquo;</a>
+<a class="btn btn-primary" href="{% url 'document_sentiment-sentiment_upload_file' %}">&laquo; Upload</a>
+      <a class="btn btn-primary" href="{% url 'document_sentiment-sentiment_preview_data_file' %}" style="float:right;">View Sample &raquo;</a>
 </div>
 
 {% endblock content %}

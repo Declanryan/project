@@ -12,6 +12,6 @@ urlpatterns = [
     path('sentiment_preview_data_file', views.sentiment_preview_data_file, name='document_sentiment-sentiment_preview_data_file'),
     path('sentiment_form', views.check_sentiment, name='document_sentiment-sentiment_form'),
     path('check_sentiment_csv', views.check_sentiment_csv, name='document_sentiment-check_sentiment_csv'),
-    path('documents/<int:pk>', views.delete_docs, name='document_sentiment-delete_docs'),
+    path('sentiment_documents/<int:pk>', views.sentiment_delete_docs, name='document_sentiment-sentiment_delete_docs'),
 
 ]

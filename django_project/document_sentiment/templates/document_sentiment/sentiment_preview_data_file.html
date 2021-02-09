@@ -15,7 +15,10 @@
             <label for="FormControlTextarea" >Text Sample</label>
             <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="10" placeholder="{{ request.session.content }}" readonly></textarea>
             </div>
-              <a class="btn btn-primary" href="{% url 'document_sentiment-check_sentiment_csv' %}">Check Sentiment &raquo;</a>             
+              <form method="post" action="{% url 'document_sentiment-check_sentiment_csv' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn-sm">Check Sentiment &raquo;</button>
+              </form>        
           </div>   
         </div>
       </div>
@@ -40,9 +43,9 @@
         <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank">Download</a>
       </td>
       <td>
-        <form method="post" action="{% url 'document_classification-select_doc' doc.pk %}">
+        <form method="post" action="{% url 'document_sentiment-sentiment_select_doc' doc.pk %}">
           {% csrf_token %}
-          <button type="submit" class="btn btn-danger btn-sm">Select</button>
+          <button type="submit" class="btn btn-success btn-sm">Select</button>
         </form>
           
       </td>
