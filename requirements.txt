@@ -76,7 +76,6 @@ termcolor==1.1.0
 thinc==7.4.1
 threadpoolctl==2.1.0
 toolz==0.11.1
-torch==1.7.1
 tqdm==4.48.2
 typing-extensions==3.7.4.3
 urllib3==1.25.10
