@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .forms import tag_selection_form, model_name_selection_form, upload_file_form
 from .models import Classification_Documents
 import boto3, botocore
@@ -23,6 +24,9 @@ from spacy.lang.en.stop_words import STOP_WORDS
 from tqdm import tqdm as tqdm
 from pprint import pprint
 import json
+import pyLDAvis
+import pyLDAvis.gensim
+
 
 def home(request): 
     return render(request, 'document_classification/home.html')
@@ -281,14 +285,13 @@ def topic_extraction(request):
     csv_string = body.read().decode('utf-8')
 
     data = pd.read_csv(StringIO(csv_string))
-    '''
     
     newest_doc = data['content']
 
     nlp = spacy.load("en_core_web_md")
 
     # My list of stop words.
-    stop_list = ["Mrs.","Ms.","say","WASHINGTON","'s","Mr.",]
+    stop_list = ["Mrs.","Ms.","say","'s","Mr.",]
 
     # Updates spaCy's default stop words list with my additional words. 
     nlp.Defaults.stop_words.update(stop_list)
@@ -333,15 +336,18 @@ def topic_extraction(request):
                                                num_topics=10, 
                                                random_state=2,
                                                update_every=1,
+                                               chunksize=100,
                                                passes=10,
                                                alpha='auto',
                                                per_word_topics=True)
     # save the model
     gensim_lda_model = datapath("saved_models/classification_model")
     lda_model.save('saved_models/classification_model/gensim_lda_model.gensim')
-    content = (lda_model.print_topics(num_words=10))'''
-    content = "success"
+    content = (lda_model.print_topics(num_words=10))
+    content = 'success'
     request.session['content'] = content
+    print(lda_model.show_topics(num_topics=10, num_words=10, log=False, formatted=True))
+    print(content)
     return render(request, 'document_classification/results_page.html', {'content':content})
    
 

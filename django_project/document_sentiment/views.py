@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from .forms import upload_file_form, sentiments_form
 from .models import Sentiment_Documents
 import boto3
@@ -30,9 +31,11 @@ def create_filter_list(data):
       filter_list.append(row)
     return filter_list
 
+
 def sentiment_import_data_type(request):
     return render(request, 'document_sentiment/sentiment_import_data_type.html')
 
+@login_required
 def sentiment_upload_file(request):
     if request.method == 'POST':
         form = upload_file_form(request.POST, request.FILES)
@@ -46,6 +49,7 @@ def sentiment_upload_file(request):
         form = upload_file_form()
     return render(request, 'document_sentiment/sentiment_upload_file.html', {'form': form})
 
+@login_required
 def sentiment_preview_data(request):
     docs = Sentiment_Documents.objects.filter(author=request.user.id)
     return render(request, 'document_sentiment/sentiment_preview_data.html', {'docs':docs})
@@ -76,6 +80,7 @@ def check_sentiment(request):
         form = sentiments_form()
     return render(request, 'document_sentiment/sentiments_form.html', {'form': form})
 
+@login_required
 def check_sentiment_csv(request):
     ''' retrive csv file from s3.
         read into datframe.
@@ -118,12 +123,11 @@ def check_sentiment_csv(request):
                     else:
                         result_str.append("Positive")
 
-            print(result) # testing
-            print(result_str) # testing
+            #print(result) # testing
+            #print(result_str) # testing
             data["Result"] = result # Add result column to dataframe
             data["Result_Label"] = result_str # Add label result to dataframe
-            data.head(5) # testing 
-           
+            # data.head(5) # testing 
             request.session['result'] = 2
             request.session['sample_pred_text'] = "sample pred text"
             return redirect('document_sentiment-sentiment_results_page')
@@ -136,7 +140,7 @@ def check_sentiment_csv(request):
         docs = Sentiment_Documents.objects.filter(author=request.user.id)
         return render(request, 'document_sentiment/sentiment_preview_data_file.html', {'docs':docs})
 
-
+@login_required
 def sentiment_preview_data_file(request):
     docs = Sentiment_Documents.objects.filter(author=request.user.id)
     return render(request, 'document_sentiment/sentiment_preview_data_file.html', {'docs':docs})
@@ -186,7 +190,7 @@ def check_file(request, pk, filename):
     else:
         return '.other'
 
-
+@login_required
 def sentiment_select_doc(request, pk):
     if request.method == 'POST':# check for post request
         doc = Sentiment_Documents.objects.get(pk=pk)# get the document ref from the database
@@ -201,13 +205,15 @@ def sentiment_select_doc(request, pk):
         messages.error(request, f'unable to process file')
     return render(request, 'document_sentiment-sentiment_preview_data.html')   
     
-
+@login_required
 def sentiment_delete_docs(request, pk):
     if request.method == 'POST':
         doc = Sentiment_Documents.objects.get(pk=pk)
         doc.delete()
     return redirect('document_sentiment-sentiment_preview_data')
 
+    
+@login_required
 def sentiment_results_page(request):
     result = request.session['result']# define result
     sample_pred_text = request.session['sample_pred_text']

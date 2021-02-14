@@ -25,3 +25,21 @@ git config --global user.name "Declan Ryan"
 git config --global user.email "dryan005@hotmail.com"
 #check version
 git --version
+# check status
+git status
+# add all files for commit
+git add .
+# add a single file
+git add <name of file>
+#commit files
+git commit -m "text for commit message"
+# send files to repositry
+git push
+# update from repo
+git pull
+
+<-- enviroment variables-->
+#alias for winhome
+nano /home/declanryan/.bashrc 
+#aws access variables
+nano ~/.aws/credentials

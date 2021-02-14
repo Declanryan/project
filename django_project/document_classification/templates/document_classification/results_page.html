@@ -83,8 +83,8 @@
           </div>
     </div>
     <div class="col-3">           
-      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ spacy_output|safe }}" readonly></textarea>
-      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ displacy_output|safe }}" readonly></textarea>           
+      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="15" placeholder="{{ request.session.content }}" readonly></textarea>
+      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="15" placeholder="x" readonly></textarea>           
     </div>
     <div class="col-5">        
       <td><div id="piechart_div" style="border: 1px solid #ccc"></div></td>
@@ -92,17 +92,9 @@
     </div>
   </div>
 </div>
-      
-    <!--Div that will hold the pie chart
-    <div id="chart_div"></div>
-<table class="columns">
-  <tr>
-    
-    <td><div id="piechart_div" style="border: 1px solid #ccc"></div></td>
-    <td><div id="barchart_div" style="border: 1px solid #ccc"></div></td>
-  </tr>
-  </tr>
-</table>-->
 
-  
+  <!---
+    <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ spacy_output|safe }}" readonly></textarea>
+      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ displacy_output|safe }}" readonly></textarea>
+   --->
 {% endblock content %}
