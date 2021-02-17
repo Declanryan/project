@@ -27,7 +27,7 @@
       series: {5: {type: 'line'}}
     };
 
-    var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.ComboChart(document.getElementById('combo_chart'));
     chart.draw(data, options);
   }
 
@@ -82,13 +82,17 @@
             </p>
           </div>
     </div>
-    <div class="col-3">           
-      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="15" placeholder="{{ request.session.content }}" readonly></textarea>
-      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="15" placeholder="x" readonly></textarea>           
+    <div class="col-8">
+      <div class="row">           
+       <td><div id="combo_chart" style="border: 1px solid #ccc"></div></td>
     </div>
-    <div class="col-5">        
+    <div class="row">        
       <td><div id="piechart_div" style="border: 1px solid #ccc"></div></td>
     <td><div id="barchart_div" style="border: 1px solid #ccc"></div></td>      
+    </div>
+    <div class='row'>
+      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="15" placeholder="{{ request.session.content }}" readonly></textarea>
+      
     </div>
   </div>
 </div>

@@ -24,8 +24,7 @@ from spacy.lang.en.stop_words import STOP_WORDS
 from tqdm import tqdm as tqdm
 from pprint import pprint
 import json
-import pyLDAvis
-import pyLDAvis.gensim
+
 
 
 def home(request): 
@@ -341,13 +340,18 @@ def topic_extraction(request):
                                                alpha='auto',
                                                per_word_topics=True)
     # save the model
-    gensim_lda_model = datapath("saved_models/classification_model")
-    lda_model.save('saved_models/classification_model/gensim_lda_model.gensim')
+    #gensim_lda_model = datapath("saved_models/classification_model")
+    #lda_model.save('saved_models/classification_model/gensim_lda_model.gensim')
     content = (lda_model.print_topics(num_words=10))
-    content = 'success'
     request.session['content'] = content
     print(lda_model.show_topics(num_topics=10, num_words=10, log=False, formatted=True))
     print(content)
+    # Compute Perplexity
+    print('\nPerplexity: ', lda_model.log_perplexity(corpus))  # a measure of how good the model is. lower the better.
+    # Compute Coherence Score
+    #coherence_model_lda = CoherenceModel(model=lda_model, texts=corpus, dictionary=words, coherence='c_v')
+    #coherence_lda = coherence_model_lda.get_coherence()
+    #print('\nCoherence Score: ', coherence_lda)
     return render(request, 'document_classification/results_page.html', {'content':content})
    
 

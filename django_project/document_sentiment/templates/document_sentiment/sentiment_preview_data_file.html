@@ -1,6 +1,7 @@
 {% extends "document_sentiment/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<div class="container-fluid">
 <div class="progress">
   <div class="progress-bar" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">30%</div>
 </div>
@@ -17,9 +18,10 @@
             </div>
               <form method="post" action="{% url 'document_sentiment-check_sentiment_csv' %}">
               {% csrf_token %}
-              <button type="submit" class="btn btn-primary btn-sm">Check Sentiment &raquo;</button>
+              <button type="submit" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ModalCenter">Check Sentiment &raquo;</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalCenter">Launch </button>
               </form>        
-          </div>   
+          </div>
         </div>
       </div>
       <div class="col-md-4 ">
@@ -56,6 +58,67 @@
 </table>
       </div>
     </div>
+  </div>
+  <!-- start modal -->
+<div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="text-center" style="font-size: 14px"> 
+          <div id="progress-bar-message">Waiting for progress to start...</div>
+          </div>
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!--- progress bar start 
+          <div class="text-center" style="font-size: 14px"> 
+          <div id="progress-bar-message">Waiting for progress to start...</div>
+          </div>--->
+
+      <div class='progress-wrapper' style="padding-top: 10px;">
+        <div id='progress-bar' class='progress-bar progress-bar-striped' role='progressbar' style="height:30px; width: 0%; border-radius: 5px">&nbsp;</div>
+      </div>
+    
+      <div id="celery-result"></div> 
+      <!--- progress bar end ---> 
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Continue</button>
+      </div>
     </div>
+  </div>
+</div>
+<!--- end modal --->
+
+
+      <script type="text/javascript">
+
+        
+    // vanilla JS version activate bar
+      document.addEventListener("DOMContentLoaded", function () {
+        var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+        CeleryProgressBar.initProgressBar(progressUrl);
+      });
+            // JQuery get progress result from worker
+            var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+
+            function customResult(resultElement, result) {
+              $( resultElement ).append(
+                $('<p>').text('Sum of all seconds is ' + result)
+              );
+            }
+
+            $(function () {
+        CeleryProgressBar.initProgressBar(progressUrl, {
+          onResult: customResult,
+        })
+      });
+    </script>
+
 <!--- --->
 {% endblock content %}

@@ -14,7 +14,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
@@ -50,6 +50,7 @@ urlpatterns = [
     path('', include('doc_api.urls')),
     path('', include('document_indexing.urls')),
     path('', include('document_sentiment.urls')),
+    re_path(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
 ]
 
 
