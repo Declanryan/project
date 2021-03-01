@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import tag_selection_form, model_name_selection_form, upload_file_form
@@ -35,7 +36,7 @@ def price_plan(request):
 
 def choose_model(request):
     return render(request, 'document_classification/choose_model.html')
-
+@login_required
 def import_data_type(request):
     return render(request, 'document_classification/import_data_type.html')
 
@@ -51,28 +52,35 @@ def model_name(request):
         form = model_name_selection_form()
         return render(request, 'document_classification/model_name.html', {'form': form})
 
+@login_required
 def preview_data(request):
     docs = Classification_Documents.objects.filter(author=request.user.id)
     return render(request, 'document_classification/preview_data.html', {'docs':docs})
 
+@login_required
 def extract_preview_file(request):
     docs = Classification_Documents.objects.filter(author=request.user.id)
     return render(request, 'document_classification/extract_preview_file.html', {'docs':docs})
 
+@login_required
 def csv_preview_file(request):
     docs = Classification_Documents.objects.filter(author=request.user.id)
     return render(request, 'document_classification/csv_preview_file.html', {'docs':docs})
 
+@login_required
 def json_preview_file(request):
     docs = Classification_Documents.objects.filter(author=request.user.id)
     return render(request, 'document_classification/json_preview_file.html', {'docs':docs})
 
+@login_required
 def results_page(request):
     return render(request, 'document_classification/results_page.html')
 
+@login_required
 def setup_complete(request):
     return render(request, 'document_classification/setup_complete.html')
 
+@login_required
 def tag_selection(request):
     if request.method == 'POST':
         labels_list =[]
@@ -84,10 +92,11 @@ def tag_selection(request):
         form = tag_selection_form()
         return render(request, 'document_classification/tag_selection.html', {'form': form})
 
+@login_required
 def testing(request): 
     return render(request, 'document_classification/testing.html')
 
-
+@login_required
 def json_upload_file(request):
     if request.method == 'POST':
         form = upload_file_form(request.POST, request.FILES)
@@ -99,6 +108,7 @@ def json_upload_file(request):
         form = upload_file_form()
     return render(request, 'document_classification/json_upload_file.html', {'form': form})
 
+@login_required
 def extract_upload_file(request):
     if request.method == 'POST':
         form = upload_file_form(request.POST, request.FILES)
@@ -110,6 +120,7 @@ def extract_upload_file(request):
         form = upload_file_form()
     return render(request, 'document_classification/extract_upload_file.html', {'form': form})
 
+@login_required
 def csv_upload_file(request):
     if request.method == 'POST':
         form = upload_file_form(request.POST, request.FILES)
@@ -122,7 +133,7 @@ def csv_upload_file(request):
     return render(request, 'document_classification/csv_upload_file.html', {'form': form})
 
 
-
+@login_required
 def upload_confirmation(request):
     if request.method == 'POST':
         form = upload_file_form(request.POST, request.FILES)
@@ -134,6 +145,7 @@ def upload_confirmation(request):
         form = upload_file_form()
     return render(request, 'document_classification/upload_confirmation.html', {'form': form})
 
+@login_required
 def delete_docs(request, pk):
     if request.method == 'POST':
         doc = Classification_Documents.objects.get(pk=pk)
@@ -196,7 +208,7 @@ def check_file(request, pk, filename):
     else:
         return '.other'
 
-
+@login_required
 def select_doc(request, pk):
     if request.method == 'POST':# check for post request
         doc = Classification_Documents.objects.get(pk=pk)# get the document ref from the database
@@ -211,12 +223,12 @@ def select_doc(request, pk):
         messages.error(request, f'unable to process file')
     return render(request, 'document_classification-extract_preview_file.html')
     
-
+@login_required
 def extract_doc(request, pk):
     if request.method == 'POST':# check for post request
         doc = Classification_Documents.objects.get(pk=pk)# get the document ref from the database
         documentName = str(doc.document)# get the real name of the doc
-        ext = check_file(documentName)
+        ext = check_file(request, pk, documentName)
         if ext == '.pdf': # check if doc is a pdf
             extract_doc_name = append_name(documentName, "extracted")# create new name for extracted doc
             content = extract_pdf_docs(request, pk)
@@ -250,19 +262,22 @@ def extract_doc(request, pk):
         messages.error(request, f'unable to extract text!')
     return render(request, 'document_classification-extract_preview_file.html')
 
-
+@login_required
 def display_extracted_text(request):
     docs = Classification_Documents.objects.filter(author=request.user.id, document__contains="extracted")
     return render(request, 'document_classification/display_extracted_text.html', {'docs':docs})
 
+@login_required
 def display_csv_text(request):
     docs = Classification_Documents.objects.filter(author=request.user.id, document__contains="csv")
     return render(request, 'document_classification/display_csv_text.html', {'docs':docs})
 
+@login_required
 def display_json_text(request):
     docs = Classification_Documents.objects.filter(author=request.user.id, document__contains="json")
     return render(request, 'document_classification/display_extracted_json.html', {'docs':docs})
-
+    
+@login_required
 def topic_extraction(request):
     # if request.method == 'POST':# check for post request
     pk = request.session['pk']

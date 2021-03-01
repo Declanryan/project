@@ -10,4 +10,4 @@ class sentiments_form(forms.ModelForm):
     text  = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = Sentiments
-        fields = ('title', 'text', 'author')
+        fields = ('title', 'text')

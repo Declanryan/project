@@ -1,5 +1,69 @@
 {% extends "document_sentiment/base.html" %}
 {% block content %}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+  google.charts.load('current', {'packages':['table']});
+  google.charts.setOnLoadCallback(drawTable);
+
+  function drawTable() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Content');
+    data.addColumn('string', 'Result');
+    data.addColumn('string', 'Result_Label');
+    data.addRows([
+      ['{{ json_data.content.0|truncatewords:"10" }}', '{{ json_data.Result.0 }}', '{{ json_data.Result_Label.0 }}'],
+      ['{{ json_data.content.1|truncatewords:"10" }}', '{{ json_data.Result.1 }}', '{{ json_data.Result_Label.1 }}'],
+      ['{{ json_data.content.2|truncatewords:"10" }}', '{{ json_data.Result.2 }}', '{{ json_data.Result_Label.2 }}'],
+      ['{{ json_data.content.3|truncatewords:"10" }}', '{{ json_data.Result.3 }}', '{{ json_data.Result_Label.3 }}'],
+      ['{{ json_data.content.4|truncatewords:"10" }}', '{{ json_data.Result.4 }}', '{{ json_data.Result_Label.4 }}'],
+      ['{{ json_data.content.5|truncatewords:"10" }}', '{{ json_data.Result.5 }}', '{{ json_data.Result_Label.5 }}'],
+      ['{{ json_data.content.6|truncatewords:"10" }}', '{{ json_data.Result.6 }}', '{{ json_data.Result_Label.6 }}'],
+      ['{{ json_data.content.7|truncatewords:"10" }}', '{{ json_data.Result.7 }}', '{{ json_data.Result_Label.7 }}'],
+      ['{{ json_data.content.8|truncatewords:"10" }}', '{{ json_data.Result.8 }}', '{{ json_data.Result_Label.8 }}'],
+      ['{{ json_data.content.9|truncatewords:"10" }}', '{{ json_data.Result.9 }}', '{{ json_data.Result_Label.9 }}'],
+      ['{{ json_data.content.10|truncatewords:"10" }}', '{{ json_data.Result.10 }}', '{{ json_data.Result_Label.10 }}'],
+      ['{{ json_data.content.11|truncatewords:"10" }}', '{{ json_data.Result.11 }}', '{{ json_data.Result_Label.11 }}'],
+      ['{{ json_data.content.12|truncatewords:"10" }}', '{{ json_data.Result.12 }}', '{{ json_data.Result_Label.12 }}'],
+      ['{{ json_data.content.13|truncatewords:"10" }}', '{{ json_data.Result.13 }}', '{{ json_data.Result_Label.13 }}'],
+      
+
+    ]);
+
+
+    var table = new google.visualization.Table(document.getElementById('table_div'));
+
+    table.draw(data, {showRowNumber: true, width: '100%', height: '100%', title:'Sentiment analysis of documents in csv file'});
+  }
+
+  function drawChart() {
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Result');
+    data.addColumn('number', 'Value');
+    data.addRows([
+      ['Positive', 3],
+      ['Neutral', 1],
+      ['Negative', 1]
+    ]);
+
+  var piechart_options = {title:'Sentiment analysis of documents in csv file',
+  				is3D:true,
+                 width:595,
+                 height:300};
+  var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+  piechart.draw(data, piechart_options);
+
+  var barchart_options = {title:'Sentiment analysis of documents in csv file',
+                 width:595,
+                 height:300,
+                 legend: 'none'};
+  var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+  barchart.draw(data, barchart_options);
+}
+</script>
 <div class="container-fluid">
  
 	<div class="row">
@@ -24,14 +88,19 @@
             </p>
           </div>
 		</div>
-		<div class="col-3">		    		
-			<textarea class="form-control z-depth-5" id="FormControlTextarea" style="border: 1px solid #ccc" rows="11" placeholder="{{ spacy_output|safe }}" readonly></textarea>
-			<textarea class="form-control z-depth-5" id="FormControlTextarea" style="border: 1px solid #ccc" rows="11" placeholder="{{ displacy_output|safe }}" readonly></textarea>		    		
+		<div class="col-4">		    		
+			
+			<div id="barchart_div" style="border: 1px solid #ccc"></div>
+			<div id="table_div" style="margin-top: 20px"></div>
 		</div>
-		<div class="col-5">				 
-			<div id="gauge-1" style="border: 1px solid #ccc">{{ gauge_output|safe }}</div>	
-			<div id="chart-1" style="border: 1px solid #ccc">{{ chart_output|safe }}</div>		    		
+		<div class="col-4">				 
+			<div id="piechart_div" style="border: 1px solid #ccc"></div>
+        	<textarea class="form-control z-depth-5" id="FormControlTextarea" style="border: 1px solid #ccc; margin-top: 10px" rows="15" readonly>{{  json_data.Result_Label|default:"no data recieved" }}</textarea>		    		
 		</div>
 	</div>
+	{% with total=json_data.Result.count %}
+    {{ total }} employee{{ total|pluralize }}
+{% endwith %}
 </div>
+
 {% endblock content %}

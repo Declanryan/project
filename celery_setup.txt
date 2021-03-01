@@ -1,0 +1,10 @@
+1-sudo apt-get install rabbitmq-server
+2-sudo systemctl enable rabbitmq-server
+3-sudo systemctl start rabbitmq-server
+  sudo service rabbitmq-server start
+4-sudo service --status-all
+5-sudo systemctl stop rabbitmq-server
+6-start venv
+7- pip install celery
+8 add files- celery.py, tasks.py,init.py
+8 celery -A django_project worker -l INFO # start worker

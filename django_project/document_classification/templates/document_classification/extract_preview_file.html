@@ -2,8 +2,6 @@
 {% block content %}
 {% load static %}
 
-<h2>{{ request.user.username}}</h2>
-
 <table class="table">
 	<thead>
 		<tr>
@@ -58,10 +56,11 @@
 		</tr>
 		{% endfor%}
 		</div class="row">
-      <a class="btn btn-primary" href="{% url 'document_classification-extract_upload_file' %}">&laquo; Upload</a>
-      <a class="btn btn-primary" href="{% url 'document_classification-display_extracted_text' %}" style="float:right;">View Sample &raquo;</a>
+     
   </div>
-	</tbody>	
+	</tbody>
+	 <a class="btn btn-primary" href="{% url 'document_classification-extract_upload_file' %}">&laquo; Upload</a>
+      <a class="btn btn-primary" href="{% url 'document_classification-display_extracted_text' %}" style="float:right;">View Sample &raquo;</a>	
 </table>
   
 {% endblock content %}
