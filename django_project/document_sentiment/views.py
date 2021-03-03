@@ -180,8 +180,20 @@ def sentiment_delete_docs(request, pk):
 def sentiment_results_page(request):
     result_id= request.session['result']# define result
     result = AsyncResult(result_id, app=app)# get the result of the task
-    data = result.get()
-    json_data = json.loads(data)
+    data_str = result.get()
+    
+    #data = pd.DataFrame(list(my_dict.items()),columns = ['content','Result', 'Result_'])
+    
+    #data = pd.read_csv(StringIO(data_str), delimiter=",", skip_blank_lines=True, names=['content', 'Result', 'Result_Label'], header=0)
+    #data=pd.read_csv(StringIO(data_str), sep=",",
+    #names=['content', 'Result', 'Result_Label'], skip_blank_lines=True, skipinitialspace=True, engine='python', header=0)
+    #print(data)
+    
+    #print(data.info)
+    #print(data['content'])
+    json_data = json.loads(data_str)
+    #data = pd.DataFrame(list(json_data.items()),columns = ['content','Result'])
+    #print(type(json_data))
     print(json_data)
     if request.method == 'POST':
             return render(request, 'document_sentiment/sentiment_results_page.html', {'json_data':json_data})

@@ -182,7 +182,7 @@ def check_file(request, pk, filename):
         csv_string = body.read().decode('utf-8')
         data = pd.read_csv(StringIO(csv_string))
         content = data.head().to_dict()
-        pprint(content)
+        #pprint(content) # testing
         request.session['content'] = content
         return '.csv'
 
@@ -201,7 +201,7 @@ def check_file(request, pk, filename):
         body = csv_obj['Body']
         content = body.read().decode('utf-8')
         # content = file.read().replace("\n", " ")
-        pprint(content)
+        # pprint(content) # testing
         request.session['content'] = content
         return '.txt'
 
@@ -228,7 +228,8 @@ def extract_doc(request, pk):
     if request.method == 'POST':# check for post request
         doc = Classification_Documents.objects.get(pk=pk)# get the document ref from the database
         documentName = str(doc.document)# get the real name of the doc
-        ext = check_file(request, pk, documentName)
+        ext = check_extension(documentName)
+        request.session['pk'] = pk
         if ext == '.pdf': # check if doc is a pdf
             extract_doc_name = append_name(documentName, "extracted")# create new name for extracted doc
             content = extract_pdf_docs(request, pk)
@@ -399,14 +400,14 @@ def extract_pdf_docs(request, pk):
             response = client.get_document_text_detection(JobId=jobId)
             status = response["JobStatus"]
             print("Job status: {}".format(status))
-            messages.info(request, f'Job status: {status}!')
+            
 
             while(status == "IN_PROGRESS"):
                 time.sleep(5)
                 response = client.get_document_text_detection(JobId=jobId)
                 status = response["JobStatus"]
                 print("Job status: {}".format(status))
-                messages.info(request, f'Job status: {status}!')
+               
 
 
             return status
@@ -422,7 +423,7 @@ def extract_pdf_docs(request, pk):
             
             pages.append(response)
             print("Resultset page recieved: {}".format(len(pages)))
-            messages.info(request, f'Resultset page recieved: {len(pages)}!')
+           
 
             nextToken = None
             if('NextToken' in response):
@@ -433,7 +434,6 @@ def extract_pdf_docs(request, pk):
                 response = client.get_document_text_detection(JobId=jobId, NextToken=nextToken)
                 pages.append(response)
                 print("Resultset page recieved: {}".format(len(pages)))
-                messages.info(request, f'Resultset page recieved: {len(pages)}!')
                 nextToken = None
                 if('NextToken' in response):
                     nextToken = response['NextToken']
@@ -442,7 +442,6 @@ def extract_pdf_docs(request, pk):
 
         jobId = startJob(s3BucketName, documentName)
         print("Started job with id: {}".format(jobId))
-        messages.info(request, f'Started job with id: {jobId}!')
         if(isJobComplete(jobId)):
             response = getJobResults(jobId)
 

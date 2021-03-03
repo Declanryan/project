@@ -61,11 +61,15 @@ def sentiment_check_task(self, pk):
 	body = csv_obj['Body']
 	csv_string = body.read().decode('utf-8')
 	data = pd.read_csv(StringIO(csv_string)) # read csv into dataframe
+	
 	nlp = stanza.Pipeline(lang='en', processors='tokenize, sentiment')# initiate stanza pipeline
 	filter_list = create_filter_list(data) # remove stop words from sentences and create a list of the filterd sentences
-	print(filter_list)
+	result_neg = 0
+	result_pos = 0
+	result_neut = 0
 	result = [] # new colum to hold result integer (0,1,2)value
 	result_str = [] # new column to hold result string value
+	result_totals = []
 	count = 0
 	for row in filter_list:# iterate through filtered list
 	    # print("row-", row) # testing
@@ -73,24 +77,32 @@ def sentiment_check_task(self, pk):
 	    # print("doc-", doc) # testing
 	    for i, sentence in enumerate(doc.sentences): # iterate through each sentence and break it down to words then apply sentiment to each
 	        # print(row,i, sentence.sentiment) # testing
+	        result_totals.append('NaN')
 	        result.append(sentence.sentiment) # add value to result column
 	        if sentence.sentiment == 0: # check value and add appropiate string value
-	            result_str.append("Negative") 
+	            result_str.append("Negative")
+	            result_neg += 1 
 	        elif sentence.sentiment == 1:
 	            result_str.append("Neutral")
+	            result_neut += 1
 	        else:
 	            result_str.append("Positive")
+	            result_pos += 1
 	    
 	    progress_recorder.set_progress(count +1, len(filter_list))
 	    count +=1
 	    time.sleep(0.1)
-	    
-	    
+
+	
+	result_totals[0] = result_pos
+	result_totals[1] = result_neg
+	result_totals[2] = result_neut
 	#print(result) # testing
 	#print(result_str) # testing
 	data["Result"] = result # Add result column to dataframe
 	data["Result_Label"] = result_str # Add label result to dataframe
 	# data.head(5) # testing
+	data['Result_totals'] = result_totals
 	json_data = data.to_json()
 	
 	return json_data
