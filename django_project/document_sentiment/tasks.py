@@ -77,7 +77,7 @@ def sentiment_check_task(self, pk):
 	    # print("doc-", doc) # testing
 	    for i, sentence in enumerate(doc.sentences): # iterate through each sentence and break it down to words then apply sentiment to each
 	        # print(row,i, sentence.sentiment) # testing
-	        result_totals.append('NaN')
+	        result_totals.append('NaN') # add NaN to fill up column
 	        result.append(sentence.sentiment) # add value to result column
 	        if sentence.sentiment == 0: # check value and add appropiate string value
 	            result_str.append("Negative")

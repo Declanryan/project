@@ -1,40 +1,49 @@
 {% extends "document_classification/base.html" %}
 {% block content %}
-<h3 class="text-center" style="color:blue; font-weight:bold;">Setup</h3>
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="width: 10%;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">10%</div>
-</div>
-<p class="text-center" style="font-weight:bold;">Choose Model</p>
 <!--- first card --->
-  <div class="container">
+  <div class="container" style="margin-top:150px;">
   <div class="card-deck">
     <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
-      <div class="card-body text-center">
-        <p class="card-text">Classification</p>
-        <p class="card-text">TODO example text</p>
-        <p class="card-text">TODO example text</p>
-        <p class="card-text">TODO example text</p>
-        <a href="{% url 'document_classification-import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select</a>
+      <div class="card-body ">
+        <h4 class="card-text text-center">Classification</h3>
+        <hr style="height:2px;border-width:0;color:gray;background-color:white">
+        <ul>
+          <li><p class="card-text">Sort documents into predefined categories!</p></li>
+          <li><p class="card-text">Perform automatic topic extraction on your documents!</p></li>
+          <li><p class="card-text">Use csv, json or txt documents!</p></li>
+      </ul>
+        <hr style="height:2px;border-width:0;color:gray;background-color:white">
+        <a href="{% url 'document_classification-import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select <i class="fas fa-angle-double-right"></i></a>
       </div>
     </div>
     <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
-      <div class="card-body text-center">
-        <p class="card-text">Sentiment analysis</p>
-        <p class="card-text">TODO example text</p>
-        <p class="card-text">TODO example text</p>
-        <p class="card-text">TODO example text</p>
-        <a href="{% url 'document_sentiment-sentiment_import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select</a>
+      <div class="card-body ">
+        <h4 class="card-text text-center">Sentiment analysis</h4>
+        <hr style="height:2px;border-width:0;color:gray;background-color:white">
+        <ul>
+           <li><p class="card-text">Test out our sentiment analyzer!</p></li>
+           <li><p class="card-text">perform sentiment analysis on multiple documents and get results for individual and overall!</p></li>
+           <li><p class="card-text">Use csv, json or txt documents!</p></li>
+      </ul>
+        <hr style="height:2px;border-width:0;color:gray;background-color:white">
+        <a href="{% url 'document_sentiment-sentiment_import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select <i class="fas fa-angle-double-right"></i></a>
       </div>
     </div>
     <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
-      <div class="card-body text-center">
-        <p class="card-text">Future Option 3</p>
-        <p class="card-text">TODO example text</p>
-        <p class="card-text">TODO example text</p>
-        <p class="card-text">TODO example text</p>
-        <a href="{% url 'document_classification-import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select</a>
+      <div class="card-body ">
+        <h4 class="card-text text-center">Document Extraction</p></h4>
+        <hr style="height:2px;border-width:0;color:gray;background-color:white">
+        <ul>
+           <li><p class="card-text">Extract text from pdf, png, or jpeg images!</p></li>
+           <li><p class="card-text">Add output to csv file!</p></li>
+           <li><p class="card-text">All document can be saved in the cloud for later use!</p></li>
+        </ul>
+        <hr style="height:2px;border-width:0;color:gray;background-color:white">
+        <a href="{% url 'document_classification-import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select <i class="fas fa-angle-double-right"></i></a>
       </div>
     </div>
   </div>
+</div>
+
 </div>
 {% endblock content %}

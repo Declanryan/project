@@ -70,7 +70,7 @@ def check_sentiment(request):
             messages.success(request, f'The detected sentiment is {result_str}!')
             request.session['result'] = result
             request.session['sample_pred_text'] = sample_pred_text
-            return redirect('document_sentiment-sentiment_results_page')          
+            return redirect('document_sentiment-sentiment_form')          
     else:
         form = sentiments_form()
     return render(request, 'document_sentiment/sentiments_form.html', {'form': form})

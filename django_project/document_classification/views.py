@@ -480,7 +480,7 @@ def read_csv_doc(request, pk):
         csv_string = body.read().decode('utf-8')
         data = pd.read_csv(StringIO(csv_string))
         content = data.head().to_dict()
-        pprint(content)
+        #pprint(content)# testing
         request.session['content'] = content
         
         return redirect('document_classification-display_csv_text')
