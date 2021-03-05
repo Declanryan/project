@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 def upload_to(instance, filename):
-		return 'documents/{0}/{1}'.format(instance.author.id , filename)
+		return 'documents/sentiment/{0}/{1}'.format(instance.author.id , filename)
 
 class Sentiment_Documents(models.Model):
 	username = models.CharField(default=User, max_length=255)
