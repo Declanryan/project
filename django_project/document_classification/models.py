@@ -5,7 +5,7 @@ from django.utils import timezone
 
 
 def upload_to(instance, filename):
-		return 'documents/{0}/{1}'.format(instance.author.id , filename)
+		return 'documents/classification/{0}/{1}'.format(instance.author.id , filename)
 
 
 class Classification_Documents(models.Model):
