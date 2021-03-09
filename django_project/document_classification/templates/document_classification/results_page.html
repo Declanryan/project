@@ -2,100 +2,281 @@
 {% block content %}
 
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<style type="text/css">
+  #body-row {
+    margin-left:0;
+    margin-right:0;
+}
+#sidebar-container {
+    min-height: 100vh;   
+    background-color: #333;
+    padding: 0;
+}
+
+/* Sidebar sizes when expanded and expanded */
+.sidebar-expanded {
+    width: 230px;
+}
+.sidebar-collapsed {
+    width: 60px;
+}
+
+/* Menu item*/
+#sidebar-container .list-group a {
+    height: 50px;
+    color: white;
+}
+
+/* Submenu item*/
+#sidebar-container .list-group .sidebar-submenu a {
+    height: 45px;
+    padding-left: 30px;
+}
+.sidebar-submenu {
+    font-size: 0.9rem;
+}
+
+/* Separators */
+.sidebar-separator-title {
+    background-color: #333;
+    height: 35px;
+}
+.sidebar-separator {
+    background-color: #333;
+    height: 25px;
+}
+.logo-separator {
+    background-color: #333;    
+    height: 60px;
+}
+
+/* Closed submenu icon */
+#sidebar-container .list-group .list-group-item[aria-expanded="false"] .submenu-icon::after {
+  content: " \f0d7";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 10px;
+}
+/* Opened submenu icon */
+#sidebar-container .list-group .list-group-item[aria-expanded="true"] .submenu-icon::after {
+  content: " \f0da";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 10px;
+}
+</style>
+<script type="text/javascript">
+  // Hide submenus
+$('#body-row .collapse').collapse('hide'); 
+
+// Collapse/Expand icon
+$('#collapse-icon').addClass('fa-angle-double-left'); 
+
+// Collapse click
+$('[data-toggle=sidebar-colapse]').click(function() {
+    SidebarCollapse();
+});
+
+function SidebarCollapse () {
+    $('.menu-collapsed').toggleClass('d-none');
+    $('.sidebar-submenu').toggleClass('d-none');
+    $('.submenu-icon').toggleClass('d-none');
+    $('#sidebar-container').toggleClass('sidebar-expanded sidebar-collapsed');
+    
+    // Treating d-flex/d-none on separators with title
+    var SeparatorTitle = $('.sidebar-separator-title');
+    if ( SeparatorTitle.hasClass('d-flex') ) {
+        SeparatorTitle.removeClass('d-flex');
+    } else {
+        SeparatorTitle.addClass('d-flex');
+    }
+    
+    // Collapse/Expand icon
+    $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
+}
+
+
+</script>
+<!-- Bootstrap row -->
+<div class="row" id="body-row" style="background-color: black;">
+    <!-- Sidebar -->
+    <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
+        <!-- d-* hiddens the Sidebar in smaller devices. Its itens can be kept on the Navbar 'Menu' -->
+        <!-- Bootstrap List Group -->
+        <ul class="list-group">
+            <!-- Separator with title -->
+            <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                <small>MAIN MENU</small>
+            </li>
+            <!-- /END Separator -->
+            <!-- Menu with submenu -->
+            <a href="#submenu1" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                   <span class="fa fa-bars fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Options</span>
+                    <span class="submenu-icon ml-auto"></span>
+                </div>
+            </a>
+            <!-- Submenu content -->
+            <div id='submenu1' class="collapse sidebar-submenu">
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="fa fa-cloud fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Save Result</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fa fa-cloud-download fa-fw mr-3"></i>
+                    <span class="menu-collapsed">Download file</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">**option**</span>
+                </a>
+            </div>
+            <a href="#submenu2" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-map fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Navigation</span>
+                    <span class="submenu-icon ml-auto"></span>
+                </div>
+            </a>
+            <!-- Submenu content -->
+            <div id='submenu2' class="collapse sidebar-submenu">
+                <a href="{% url 'document_classification-csv_preview_file' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="fa fa-link fa-fw mr-3"></span>
+                    <span class="menu-collapsed">CSV Docs</span>
+                </a>
+                <a href="{% url 'document_classification-display_csv_text' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="fa fa-link fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Doc Preview</span>
+                </a>
+            </div>
+            <a href="#" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-tasks fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Tasks</span>
+                </div>
+            </a>
+            <!-- Separator with title -->
+            <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                <small>Forum</small>
+            </li>
+            <!-- /END Separator -->
+            <a href="{% url 'post-create' %}" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-edit fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Create Post</span>
+                </div>
+            </a>
+            <a href="#" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-envelope-o fa-fw mr-3"></span>
+                    <span class="menu-collapsed">View posts <span class="badge badge-pill badge-primary ml-2"></span></span>
+                </div>
+            </a>
+            <!-- Separator without title -->
+            <li class="list-group-item sidebar-separator menu-collapsed"></li>
+            <!-- /END Separator -->
+            <a href="#" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-question fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Help</span>
+                </div>
+            </a>
+            <a href="#top" data-toggle="sidebar-colapse" class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span id="collapse-icon" class="fa fa-2x mr-3"></span>
+                    <span id="collapse-text" class="menu-collapsed">Collapse</span>
+                </div>
+            </a>
+        </ul><!-- List Group END-->
+    </div><!-- sidebar-container END -->
+    <!-- MAIN -->
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
   google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawVisualization);
   google.charts.setOnLoadCallback(drawChart);
+  google.charts.load('current', {'packages':['table']});
+  google.charts.setOnLoadCallback(drawTable);
 
-  function drawVisualization() {
-    // Some raw data (not necessarily accurate)
-    var data = google.visualization.arrayToDataTable([
-      ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
-      ['2004/05',  165,      938,         522,             998,           450,      614.6],
-      ['2005/06',  135,      1120,        599,             1268,          288,      682],
-      ['2006/07',  157,      1167,        587,             807,           397,      623],
-      ['2007/08',  139,      1110,        615,             968,           215,      609.4],
-      ['2008/09',  136,      691,         629,             1026,          366,      569.6]
+
+  function drawTable() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Content');
+    data.addColumn('string', 'Result');
+    data.addRows([
+      ['{{ documents.0|truncatewords:"10" }}', '{{ topic_result.0 }}'],
+      ['{{ documents.1|truncatewords:"10" }}', '{{ topic_result.1 }}'],
+      ['{{ documents.2|truncatewords:"10" }}', '{{ topic_result.2 }}'],
+      ['{{ documents.3|truncatewords:"10" }}', '{{ topic_result.3 }}'],
+      ['{{ documents.4|truncatewords:"10" }}', '{{ topic_result.4 }}'],
+      ['{{ documents.5|truncatewords:"10" }}', '{{ topic_result.5 }}'],
+      ['{{ documents.6|truncatewords:"10" }}', '{{ topic_result.6 }}'],
+      ['{{ documents.7|truncatewords:"10" }}', '{{ topic_result.7 }}'],
+      ['{{ documents.8|truncatewords:"10" }}', '{{ topic_result.8 }}'],
+      ['{{ documents.9|truncatewords:"10" }}', '{{ topic_result.9 }}'],
+      ['{{ documents.10|truncatewords:"10" }}', '{{ topic_result.10 }}'],
+      ['{{ documents.11|truncatewords:"10" }}', '{{ topic_result.10 }}'],
+      ['{{ documents.12|truncatewords:"10" }}', '{{ topic_result.12 }}'],
+      ['{{ documents.13|truncatewords:"10" }}', '{{ topic_result.13 }}'],
+      ['{{ documents.14|truncatewords:"10" }}', '{{ topic_result.14 }}']
+
     ]);
 
-    var options = {
-      title : 'Monthly Coffee Production by Country',
-      vAxis: {title: 'Cups'},
-      hAxis: {title: 'Month'},
-      seriesType: 'bars',
-      series: {5: {type: 'line'}}
-    };
 
-    var chart = new google.visualization.ComboChart(document.getElementById('combo_chart'));
-    chart.draw(data, options);
+    var table = new google.visualization.Table(document.getElementById('table_div'));
+
+    table.draw(data, {showRowNumber: true, width: '100%', height: '100%', title:'Sentiment analysis of documents in csv file'});
   }
 
   function drawChart() {
 
     var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Topping');
-    data.addColumn('number', 'Slices');
+    data.addColumn('string', 'Result');
+    data.addColumn('number', 'Value');
     data.addRows([
-      ['Mushrooms', 3],
-      ['Onions', 1],
-      ['Olives', 1],
-      ['Zucchini', 1],
-      ['Pepperoni', 2]
+      ['Topic 1', parseInt('{{ topic_totals.0 }}')],
+      ['Topic 2', parseInt('{{ topic_totals.1 }}')],
+      ['Topic 3', parseInt('{{ topic_totals.2 }}')],
+      ['Topic 4', parseInt('{{ topic_totals.3 }}')],
+      ['Topic 5', parseInt('{{ topic_totals.4 }}')],
+      ['Topic 6', parseInt('{{ topic_totals.5 }}')],
+      ['Topic 7', parseInt('{{ topic_totals.6 }}')],
+      ['Topic 8', parseInt('{{ topic_totals.7 }}')],
+      ['Topic 9', parseInt('{{ topic_totals.8 }}')],
+      ['Topic 10', parseInt('{{ topic_totals.9 }}')]
     ]);
 
-  var piechart_options = {title:'Pie Chart: How Much Pizza I Ate Last Night',
-                 width:400,
-                 height:300};
+  var piechart_options = {title:'Result of automatic topic extraction by %',
+          is3D:true,
+                 width:600,
+                 height:350};
   var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
   piechart.draw(data, piechart_options);
 
-  var barchart_options = {title:'Barchart: How Much Pizza I Ate Last Night',
-                 width:400,
-                 height:300,
+  var barchart_options = {title:'Result of automatic topic extraction by value',
+                 width:600,
+                 height:350,
                  legend: 'none'};
   var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
   barchart.draw(data, barchart_options);
 }
 </script>
-<div class="container-fluid">
  
-  <div class="row">
-    <div class="col-2">
-      <div class="content-section">
-            <h3>Sidebar</h3>
-            <p class='text-muted'>TODO.
-            <ul class="list-group">
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-              <li class="list-group-item list-group-item-light"><a href="{% url 'register' %}">Heading 1</a></li>
-            </ul>
-            </p>
-          </div>
+  
+    <div class="col-4">           
+      <div id="barchart_div" style="margin-top: 40px;"></div>
+      <div id="table_div" style="margin-top: 20px;"></div>
     </div>
-    <div class="col-8">
-      <div class="row">           
-       <td><div id="combo_chart" style="border: 1px solid #ccc"></div></td>
+    <div class="col-4">        
+      <div id="piechart_div" style="margin-top: 40px"></div>
+      <textarea class="form-control z-depth-5" id="FormControlTextarea" style=" margin-top: 20px" rows="16" >
+       {{ topics_list }}
+      </textarea>           
     </div>
-    <div class="row">        
-      <td><div id="piechart_div" style="border: 1px solid #ccc"></div></td>
-    <td><div id="barchart_div" style="border: 1px solid #ccc"></div></td>      
-    </div>
-    <div class='row'>
-      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="15" placeholder="{{ request.session.content }}" readonly></textarea>
-      
-    </div>
-  </div>
-</div>
+  
+  
+</div><!-- body-row END -->
 
   <!---
     <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ spacy_output|safe }}" readonly></textarea>
