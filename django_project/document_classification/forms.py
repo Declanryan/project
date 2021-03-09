@@ -20,3 +20,19 @@ class upload_file_form(forms.ModelForm):
     class Meta:
         model = Classification_Documents
         fields = ('description', 'document')
+
+
+class topic_extraction_form(forms.Form):
+    CHOICES =( 
+    ("1", "5"), 
+    ("2", "10"), 
+    ("3", "15"), 
+    ("4", "20"),
+    ("5", "25"), 
+    ("6", "30"), 
+    ("7", "35"), 
+    ("8", "40"),
+    ("9", "45"),
+    ("10", "50")) 
+    
+    No_of_topics = forms.MultipleChoiceField(choices=CHOICES)
