@@ -14,15 +14,16 @@
     <script src="https://kit.fontawesome.com/7fb0bcfffc.js" crossorigin="anonymous"></script>
 
     {% if title %}
-        <title>Doc Sort- {{ title }}</title>
+        <title>Docu Sort- {{ title }}</title>
     {% else %}
-        <title>Doc Sort</title>
+        <title>Docu Sort</title>
     {% endif %}
 </head>
 <body>
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
+          <a href="{% url 'document_classification-home' %}" style="margin-right: 20px;"><img class="rounded-circle rounded-sm" src="static/site_images/logo.PNG"></a>
           <a class="navbar-brand mr-4" href="{% url 'document_classification-home' %}">Doc Sort</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
