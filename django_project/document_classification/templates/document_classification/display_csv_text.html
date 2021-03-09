@@ -1,40 +1,44 @@
 {% extends "document_classification/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="progress">
-  <div class="progress-bar" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">30%</div>
-</div>
-	<h3 class="text-center">Setup</h3>
-<p class="text-center">Data Import</p>
+ <div class="container">
+<h3 class="text-center">Topic Extraction</h3>
 <!---first card --->
- <div class="row">
+ <div class="row" style="margin-top:50px;">
       <div class="col-md-6">
         <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
           <div class="card-body">
             <div class="form-group shadow-textarea">
-            <label for="FormControlTextarea" >Extracted text sample</label>
-            <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="10" placeholder="{{request.session.content }}" readonly></textarea>
+            <p for="FormControlTextarea" class="text-center">Extracted text sample</p>
+            <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="7" placeholder="{{request.session.content }}" ></textarea>
             </div>
           </div>
+            <form method="post" action="{% url 'document_classification-csv_preview_file' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-block ">&laquo; New selection</button>
+              </form>
           <div>
-              <form method="post" action="{% url 'document_classification-csv_preview_file' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-sm">&laquo; Add More</button>
-              </form>
+              
               <div>
-              <form method="post" action="{% url 'document_classification-topic_extraction' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary btn-sm" style="float:right;">Topic extraction &raquo;</button>
-              </form>
             </div>
           </div>
     
         </div>
       </div>
-    {% for key, value in request.session.content.items %}
-            <li><a href="{{key}}">{{value}}</a></li>
-          {% endfor %}
+      <div class="col-md-6">
+        <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
+          <div class="card-body">
+            <div><p>You tell the algorithm how many topics you think there are. You can either use an informed estimate (e.g. results from a previous analysis), or simply trial-and-error. In trying different estimates, you may pick the one that generates topics to your desired level of interpretability, or the one yielding the highest statistical certainty. In order to begin the extraction process please highlight the total no of topics you would like to extract ftom the corpus below and click Topic extraction!</p></div>
+          <form method="post" action="{% url 'document_classification-topic_extraction' %}">
+            {% csrf_token %}
+            {{ form|crispy}}
+            <button type="submit" class="btn btn-primary btn-block" style="float:right;">Topic extraction &raquo;</button>
+      </form>
     </div>
-    </div>
+  </div>
+</div>
+</div>
+</div>
+    
+
     {% endblock content %}
-<!--- --->
