@@ -1,0 +1,21 @@
+{% extends "document_summary/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!--- heading and progress bar --->
+<div class="row">
+        <div class="col-lg">
+<h3 class="text-center" style="font-weight:bold;">Summary analysis preview</h3>
+<!---- card --->
+<div class="card mx-auto text-light bg-steel mb-3" style="max-width: 30rem;">
+	<div class="card-body">
+		<form method="post">
+		{% csrf_token %}
+		{{ form|crispy}}
+		<button type="submit" class="btn btn-primary">Analyze</button>
+		</form>
+	</div>
+<!---<a href="{% url 'document_sentiment-sentiment_preview_data' %}" class="btn btn-block btn-primary">File Select</a> testing--->
+</div>
+</div>
+</div>
+{% endblock content %}

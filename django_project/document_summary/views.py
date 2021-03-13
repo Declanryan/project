@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .forms import upload_file_form, sentiments_form
 from .models import Sentiment_Documents
@@ -21,16 +20,16 @@ from celery import Celery
 from celery.result import AsyncResult
 from django_project.celery import app
 
-def sentiment_celery_example(request):
+def summary_celery_example(request):
     result = my_task.delay(10)
-    return render(request, 'document_sentiment/sentiment_celery_example.html', context={'task_id': result.task_id})
+    return render(request, 'document_summary/summary_celery_example.html', context={'task_id': result.task_id})
 
 
-def sentiment_import_data_type(request):
-    return render(request, 'document_sentiment/sentiment_import_data_type.html')
+def summary_import_data_type(request):
+    return render(request, 'document_summary/summary_import_data_type.html')
 
 @login_required
-def sentiment_upload_file(request):
+def summary_upload_file(request):
     if request.method == 'POST':
         form = upload_file_form(request.POST, request.FILES)
         form.instance.author = request.user
@@ -38,17 +37,17 @@ def sentiment_upload_file(request):
         if form.is_valid():
            
             form.save()
-            return redirect('document_sentiment-sentiment_preview_data')
+            return redirect('document_summary-summary_preview_data')
     else:
         form = upload_file_form()
-    return render(request, 'document_sentiment/sentiment_upload_file.html', {'form': form})
+    return render(request, 'document_summary/summary_upload_file.html', {'form': form})
 
 @login_required
-def sentiment_preview_data(request):
+def summary_preview_data(request):
     docs = Sentiment_Documents.objects.filter(author=request.user.id)
-    return render(request, 'document_sentiment/sentiment_preview_data.html', {'docs':docs})
+    return render(request, 'document_summary/summary_preview_data.html', {'docs':docs})
 
-def check_sentiment(request):
+def check_summary(request):
     
     if request.method == 'POST':
         form = sentiments_form(request.POST)
@@ -70,17 +69,17 @@ def check_sentiment(request):
             messages.success(request, f'The detected sentiment is {result_str}!')
             request.session['result'] = result
             request.session['sample_pred_text'] = sample_pred_text
-            return redirect('document_sentiment-sentiment_form')          
+            return redirect('document_summary-summary_form')          
     else:
         form = sentiments_form()
-    return render(request, 'document_sentiment/sentiments_form.html', {'form': form})
+    return render(request, 'document_summary/summary_form.html', {'form': form})
 
 def append_name(filename, type):
     name, ext = os.path.splitext(filename)# split the filename
     return "{file_name}_{text}".format(file_name=name, text=type)# add extracted to name and .csv extension
 
 @login_required
-def check_sentiment_csv(request):
+def check_summary_csv(request):
     
     if request.method == 'POST':
         try:
@@ -94,19 +93,19 @@ def check_sentiment_csv(request):
             request.session['result'] = result.id # get the id of the task for retrival from storage
 
             docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
-            return render(request, 'document_sentiment/sentiment_progress_csv.html', context={'task_id': result.task_id, 'docs':docs})
+            return render(request, 'document_summary/summary_progress_csv.html', context={'task_id': result.task_id, 'docs':docs})
         except:
             messages.error(request, f'unable to process file')
             docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
-            return render(request, 'document_sentiment/sentiment_preview_data_file.html', {'docs':docs})
+            return render(request, 'document_summary/summary_preview_data_file.html', {'docs':docs})
     else:
         docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
-        return render(request, 'document_sentiment/sentiment_preview_data_file.html', {'docs':docs})
+        return render(request, 'document_summary/summary_preview_data_file.html', {'docs':docs})
 
 @login_required
-def sentiment_preview_data_file(request):
+def summary_preview_data_file(request):
     docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
-    return render(request, 'document_sentiment/sentiment_preview_data_file.html', {'docs':docs})
+    return render(request, 'document_summary/summary_preview_data_file.html', {'docs':docs})
 
 def check_file(request, pk, filename):
     name, ext = os.path.splitext(filename)# split the filename
@@ -154,30 +153,30 @@ def check_file(request, pk, filename):
         return '.other'
 
 @login_required
-def sentiment_select_doc(request, pk):
+def summary_select_doc(request, pk):
     if request.method == 'POST':# check for post request
         doc = Sentiment_Documents.objects.get(pk=pk)# get the document ref from the database
         documentName = str(doc.document)# get the real name of the doc
         ext = check_file(request, pk, documentName)
         if ext == '.other': # check if doc is unsupported format
             messages.error(request, f'Please use an extracted file format such as .txt, .csv or begin extraction process on a new file')
-            return redirect('document_sentiment-sentiment_preview_data')
+            return redirect('document_summary-summary_preview_data')
         else:
-            return redirect('document_sentiment-sentiment_preview_data_file')
+            return redirect('document_summary-summary_preview_data_file')
     else:
         messages.error(request, f'unable to process file')
-    return render(request, 'document_sentiment-sentiment_preview_data.html')   
+    return render(request, 'document_summary-summary_preview_data.html')   
     
 @login_required
-def sentiment_delete_docs(request, pk):
+def summary_delete_docs(request, pk):
     if request.method == 'POST':
         doc = Sentiment_Documents.objects.get(pk=pk)
         doc.delete()
-    return redirect('document_sentiment-sentiment_preview_data')
+    return redirect('document_summary-summary_preview_data')
 
     
 @login_required
-def sentiment_results_page(request):
+def summary_results_page(request):
     result_id= request.session['result']# define result
     result = AsyncResult(result_id, app=app)# get the result of the task
     data_str = result.get()
@@ -196,10 +195,10 @@ def sentiment_results_page(request):
     #print(type(json_data))
     print(json_data)
     if request.method == 'POST':
-            return render(request, 'document_sentiment/sentiment_results_page.html', {'json_data':json_data})
+            return render(request, 'document_summary/summary_results_page.html', {'json_data':json_data})
     else:
          docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
-    return render(request, 'document_sentiment/sentiment_preview_data_file.html', {'docs':docs})
+    return render(request, 'document_summary/summary_preview_data_file.html', {'docs':docs})
     
 
     

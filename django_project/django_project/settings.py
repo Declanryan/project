@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'document_classification',
     'document_sentiment',
     'document_indexing',
+    'document_summary'
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
     'crispy_forms',

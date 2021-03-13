@@ -1,0 +1,30 @@
+{% extends "document_summary/base.html" %}
+{% block content %}
+
+<!---first card --->
+	<div class="card mx-auto text-light bg-steel mb-3 text-center" style="max-width: 30rem; margin-top: 10rem">
+  <div class="card-body">
+    <h5 class="card-title">Test Summary </h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+  <a href="{% url 'document_summary-summary_form' %}" class="btn btn-block btn-primary">Continue <i class="fas fa-angle-double-right"></i></a>
+</div>
+<!---second card --->
+<div class="card mx-auto text-white bg-steel mb-3 text-center" style="max-width: 30rem;"> 
+  <div class="card-body">
+    <h5 class="card-title">Add C.S.V.</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+  <a href="{% url 'document_summary-summary_upload_file' %}" class="btn btn-block btn-primary">Continue <i class="fas fa-angle-double-right"></i></a>
+</div>
+<!---third card --->
+<div class="card mx-auto text-white bg-steel mb-3 text-center" style="max-width: 30rem;">
+  <div class="card-body">
+    <h5 class="card-title">Add JSON</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+  <a href="{% url 'document_summary-summary_upload_file' %}" class="btn btn-block btn-primary">Continue <i class="fas fa-angle-double-right"></i></a>
+</div>
+</div>
+</div>
+{% endblock content %}
