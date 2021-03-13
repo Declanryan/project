@@ -1,16 +1,25 @@
 #new setup
 sudo apt-get update && sudo apt-get upgrade
-sudo apt install python3
-sudo apt install python3-pip
+sudo apt-get install python3
+sudo apt-get install python3-pip
+####install and upgrade to 3.7####
+sudo apt install python3.7
+sudo rm /usr/bin/python3
+sudo ln -s python3.7 /usr/bin/python3
+python3 --version
+#####################################
 git clone https://github.com/Declanryan/project.git
 cd project
-sudo apt install virtualenv
-virtualenv -p python3 myenv
-source venv/bin/activate
+sudo apt-get install python3-venv
+python3 -m venv doc_sort-env
+source doc_sort-env/bin/activate
 pip install -r requirements.txt.
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py createsuperuser
 cd django_project
 python3 manage.py runserver
-
+celery -A django_project worker -l INFO
 
 # create requirements.txt
 $ pip freeze > requirements.txt#
