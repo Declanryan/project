@@ -17,6 +17,12 @@ pip install -r requirements.txt.
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py createsuperuser
+###install models ####
+# activate pyton terminal
+python3
+import stanza,spacy
+stanza.download('en')
+python3 -m spacy download en_core_web_md
 cd django_project
 python3 manage.py runserver
 celery -A django_project worker -l INFO
