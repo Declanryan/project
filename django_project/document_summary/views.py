@@ -2,20 +2,19 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import upload_file_form, sentiments_form
-from .models import Sentiment_Documents
+from .forms import upload_file_form, summary_form
+from .models import Summary_Documents
 import boto3
 from botocore.config import Config
 import time, os, sys
-from collections import OrderedDict
+from gensim.summarization.summarizer import summarize
 import pandas as pd
-import stanza
 import spacy
 import json
-from spacy import displacy
+
 from io import StringIO
 from pprint import pprint
-from .tasks import my_task, sentiment_check_task
+#from .tasks import my_task, sentiment_check_task
 from celery import Celery
 from celery.result import AsyncResult
 from django_project.celery import app
@@ -44,34 +43,23 @@ def summary_upload_file(request):
 
 @login_required
 def summary_preview_data(request):
-    docs = Sentiment_Documents.objects.filter(author=request.user.id)
+    docs = Summary_Documents.objects.filter(author=request.user.id)
     return render(request, 'document_summary/summary_preview_data.html', {'docs':docs})
 
 def check_summary(request):
     
     if request.method == 'POST':
-        form = sentiments_form(request.POST)
+        form = summary_form(request.POST)
         if form.is_valid():
-            sample_pred_text = form.cleaned_data.get('text')
-            nlp = stanza.Pipeline(lang='en', processors='tokenize,sentiment')
-            doc = nlp(sample_pred_text)
-            for i, sentence in enumerate(doc.sentences):
-                print(i, sentence.sentiment)
-                result = sentence.sentiment
+            sample_text = form.cleaned_data.get('text')
+            result = summarize(sample_text, ratio = 0.05)
             form.sentiment = result
             # form.save() # option to save to database
-            if result == 0:
-                result_str = "Negative" 
-            elif result == 1:
-                result_str = "Neutral"
-            else:
-                result_str = "Positive"
-            messages.success(request, f'The detected sentiment is {result_str}!')
-            request.session['result'] = result
-            request.session['sample_pred_text'] = sample_pred_text
-            return redirect('document_summary-summary_form')          
+            
+            messages.success(request, f'Summary complete!')
+            return render('document_summary/summary_form.html', {'form':form, 'sample_text':sample_text, 'result':result})          
     else:
-        form = sentiments_form()
+        form = summary_form()
     return render(request, 'document_summary/summary_form.html', {'form': form})
 
 def append_name(filename, type):

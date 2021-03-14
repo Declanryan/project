@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'document_classification',
     'document_sentiment',
     'document_indexing',
-    'document_summary'
+    'document_summary',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
     'crispy_forms',
@@ -170,7 +170,7 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-CELERY_BROKER_URL='redis://:p4a846e24a99868f1a2637d91919d183c1238269035e90b3cc38420c72bcf36e5@ec2-79-125-41-154.eu-west-1.compute.amazonaws.com:19739'
+CELERY_BROKER_URL='redis://:pccc9fd9f957a3e29ea98c916eca4fbf0dfe973030bbd8efc8100cef3f8fe79b5@ec2-34-253-153-240.eu-west-1.compute.amazonaws.com:6379'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'django-db'
