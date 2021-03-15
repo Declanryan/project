@@ -54,7 +54,7 @@ def check_sentiment(request):
         form = sentiments_form(request.POST)
         if form.is_valid():
             sample_pred_text = form.cleaned_data.get('text')
-            nlp = stanza.Pipeline(lang='en', processors='tokenize,sentiment')
+            nlp = stanza.Pipeline(lang='en', processors='tokenize, sentiment')
             doc = nlp(sample_pred_text)
             for i, sentence in enumerate(doc.sentences):
                 print(i, sentence.sentiment)

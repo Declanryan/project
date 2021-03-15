@@ -24,7 +24,7 @@ class Sentiment_Documents(models.Model):
 class Sentiments(models.Model):
 	title = models.CharField(max_length=20)
 	sentiment =models.CharField(max_length=20)
-	text = models.CharField(max_length=500)
+	text = models.TextField(max_length=2000)
 	request_sent = models.DateTimeField(auto_now_add=True)
 	author = models.ForeignKey(User, on_delete=models.CASCADE)
 

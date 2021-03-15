@@ -23,8 +23,8 @@ class Summary_Documents(models.Model):
 
 class Summary(models.Model):
 	title = models.CharField(max_length=20)
-	summary=models.CharField(max_length=500)
-	text = models.CharField(max_length=500)
+	summary=models.TextField(default='test')
+	text = models.CharField(max_length=5000)
 	request_sent = models.DateTimeField(auto_now_add=True)
 	author = models.ForeignKey(User, on_delete=models.CASCADE)
 

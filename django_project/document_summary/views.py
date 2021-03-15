@@ -52,12 +52,15 @@ def check_summary(request):
         form = summary_form(request.POST)
         if form.is_valid():
             sample_text = form.cleaned_data.get('text')
-            result = summarize(sample_text, ratio = 0.05)
-            form.sentiment = result
+            # print(sample_text)
+            result = summarize(sample_text, ratio = 0.1)
+            # result = 'success'
+            #form.summary = result
             # form.save() # option to save to database
+            print(result)
             
             messages.success(request, f'Summary complete!')
-            return render('document_summary/summary_form.html', {'form':form, 'sample_text':sample_text, 'result':result})          
+            return render(request, 'document_summary/summary_form.html', {'form':form, 'result':result})          
     else:
         form = summary_form()
     return render(request, 'document_summary/summary_form.html', {'form': form})
