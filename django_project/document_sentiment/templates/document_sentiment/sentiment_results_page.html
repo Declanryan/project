@@ -98,7 +98,7 @@ function SidebarCollapse () {
 
 </script>
 <!-- Bootstrap row -->
-<div class="row" id="body-row">
+<div class="row" id="body-row" style="background-color: black;">
     <!-- Sidebar -->
     <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
         <!-- d-* hiddens the Sidebar in smaller devices. Its itens can be kept on the Navbar 'Menu' -->
@@ -239,14 +239,14 @@ function SidebarCollapse () {
 
   var piechart_options = {title:'Sentiment analysis of documents in csv file',
           is3D:true,
-                 width:595,
-                 height:300};
+                 width:750,
+                 height:350};
   var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
   piechart.draw(data, piechart_options);
 
   var barchart_options = {title:'Sentiment analysis of documents in csv file',
-                 width:595,
-                 height:300,
+                 width:750,
+                 height:350,
                  legend: 'none'};
   var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
   barchart.draw(data, barchart_options);
@@ -254,13 +254,13 @@ function SidebarCollapse () {
 </script>
  
   
-    <div class="col-4">           
-      <div id="barchart_div"></div>
+    <div class="col-5">           
+      <div id="barchart_div" style="margin-top: 40px;"></div>
       <div id="table_div" style="margin-top: 20px"></div>
     </div>
-    <div class="col-4">        
-      <div id="piechart_div"></div>
-      <textarea class="form-control z-depth-5" id="FormControlTextarea" style=" margin-top: 10px" rows="15" readonly>{{  json_data.Result_Label|default:"no data recieved" }}</textarea>           
+    <div class="col-5">        
+      <div id="piechart_div" style="margin-top: 40px;"></div>
+      <textarea class="form-control z-depth-5" id="FormControlTextarea" style=" margin-top: 10px" rows="15" readonly>{{  json_data.Result_Label.0|default:"no data recieved" }}</textarea>           
     </div>
   
   

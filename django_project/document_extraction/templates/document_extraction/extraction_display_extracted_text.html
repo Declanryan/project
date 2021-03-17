@@ -1,4 +1,4 @@
-{% extends "document_classification/base.html" %}
+{% extends "document_extraction/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container" style="margin-top: 50px;">
@@ -11,9 +11,10 @@
             <label for="FormControlTextarea" >Extracted text sample</label>
             <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="10" placeholder="{{ request.session.content }}" readonly></textarea>
             </div>
-              <a class="btn btn-primary" href="{% url 'document_classification-extract_preview_file' %}">&laquo; Extract More</a>
-              <a class="btn btn-primary" href="{% url 'document_classification-topic_extraction' %}">*** Option *** &raquo;</a>
-              <a class="btn btn-primary" href="{% url 'document_classification-tag_selection' %}">Add to file&raquo;</a>
+            
+              <a class="btn btn-primary" style="margin-left: 100px;" href="{% url 'document_extraction-extraction_preview_file' %}">&laquo; Extract More</a>
+              <a class="btn btn-primary" href="#">Add to file &raquo;</a>
+            
           </div>
     
         </div>
@@ -39,7 +40,7 @@
         <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank">Download</a>
       </td>
       <td>
-        <form method="post" action="{% url 'document_classification-select_doc' doc.pk %}">
+        <form method="post" action="{% url 'document_extraction-select_doc' doc.pk %}">
           {% csrf_token %}
           <button type="submit" class="btn btn-danger btn-sm">Select</button>
         </form>

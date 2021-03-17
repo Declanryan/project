@@ -1,0 +1,12 @@
+{% extends "document_extraction/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!---first card --->
+	<div class="card mx-auto text-light bg-steel mb-3" style="max-width: 30rem;">
+  <div class="card-body">
+  <form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form|crispy}}
+   <button type="submit" class="btn btn-primary">Upload <i class="fas fa-cloud-upload-alt"></i></button>
+   <a href="{% url 'document_extraction-extraction_preview_file' %}" class="btn btn-primary" style="float:right;">View files <i class="far fa-folder-open"></i></a>
+{% endblock content %}

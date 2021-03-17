@@ -51,6 +51,7 @@ urlpatterns = [
     path('', include('document_indexing.urls')),
     path('', include('document_sentiment.urls')),
     path('', include('document_summary.urls')),
+    path('', include('document_extraction.urls')),
     re_path(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
 ]
 

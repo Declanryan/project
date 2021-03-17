@@ -7,7 +7,9 @@ from .models import Summary_Documents
 import boto3
 from botocore.config import Config
 import time, os, sys
+from gensim import summarization
 from gensim.summarization.summarizer import summarize
+summarization.summarizer.INPUT_MIN_LENGTH=0
 import pandas as pd
 import spacy
 import json
@@ -34,7 +36,6 @@ def summary_upload_file(request):
         form.instance.author = request.user
         print (form.instance.author)
         if form.is_valid():
-           
             form.save()
             return redirect('document_summary-summary_preview_data')
     else:
@@ -53,13 +54,15 @@ def check_summary(request):
         if form.is_valid():
             sample_text = form.cleaned_data.get('text')
             # print(sample_text)
-            result = summarize(sample_text, ratio = 0.1)
+            result = summarize(sample_text, ratio = 0.05)
+            if result == None:
+                result = summarize(sample_text, word_count = 10)
             # result = 'success'
             #form.summary = result
             # form.save() # option to save to database
             print(result)
             
-            messages.success(request, f'Summary complete!')
+            messages.success(request, f'Text Summarization Complete!')
             return render(request, 'document_summary/summary_form.html', {'form':form, 'result':result})          
     else:
         form = summary_form()

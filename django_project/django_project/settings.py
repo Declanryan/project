@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['192.168.0.192','localhost', '127.0.0.1']
 INSTALLED_APPS = [
     'doc_api.apps.DocApiConfig',
     'document_classification',
+    'document_extraction',
     'document_sentiment',
     'document_indexing',
     'document_summary',

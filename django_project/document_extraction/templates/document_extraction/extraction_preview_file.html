@@ -1,4 +1,4 @@
-{% extends "document_classification/base.html" %}
+{% extends "document_extraction/base.html" %}
 {% block content %}
 {% load static %}
 
@@ -32,21 +32,21 @@
 				view</a>
 			</td>
 			<td>
-				<form method="post" action="{% url 'document_classification-delete_docs' doc.pk %}">
+				<form method="post" action="{% url 'document_extraction-delete_docs' doc.pk %}">
 					{% csrf_token %}
 					<button type="submit" class="btn btn-danger btn-sm">Delete</button>
 				</form>
 					
 			</td>
 			<td>
-				<form method="post" action="{% url 'document_classification-extract_doc' doc.pk %}">
+				<form method="post" action="{% url 'document_extraction-extract_doc' doc.pk %}">
 					{% csrf_token %}
 					<button type="submit" class="btn btn-info btn-sm">Extract</button>
 				</form>
 					
 			</td>
 			<td>
-				<form method="post" action="{% url 'document_classification-select_doc' doc.pk %}">
+				<form method="post" action="{% url 'document_extraction-select_doc' doc.pk %}">
 					{% csrf_token %}
 					<button type="submit" class="btn btn-success btn-sm">Select</button>
 				</form>
@@ -59,8 +59,8 @@
      
   </div>
 	</tbody>
-	 <a class="btn btn-primary" href="{% url 'document_classification-extract_upload_file' %}">&laquo; Upload</a>
-      <a class="btn btn-primary" href="{% url 'document_classification-display_extracted_text' %}" style="float:right;">View Sample &raquo;</a>	
+	 <a class="btn btn-primary" href="{% url 'document_extraction-extraction_upload_file' %}">&laquo; Upload</a>
+      <a class="btn btn-primary" href="{% url 'document_extraction-extraction_display_extracted_text' %}" style="float:right;">View Sample &raquo;</a>	
 </table>
   
 {% endblock content %}

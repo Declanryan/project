@@ -1,0 +1,28 @@
+{% extends "document_extraction/base.html" %}
+{% block content %}
+<h3 class="text-center">File Format Selection</h3>
+<!---first card --->
+	<div class="card mx-auto text-light bg-steel mb-3" style="max-width: 30rem;">
+  <div class="card-body">
+    <h5 class="card-title">Add .png</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+  <a href="{% url 'document_extraction-extraction_upload_file' %}" class="btn btn-block btn-primary">Continue</a>
+</div>
+<!---second card --->
+<div class="card mx-auto text-white bg-steel mb-3" style="max-width: 30rem;"> 
+  <div class="card-body">
+    <h5 class="card-title">Add .jpeg</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+  <a href="{% url 'document_extraction-extraction_upload_file' %}" class="btn btn-block btn-primary">Continue</a>
+</div>
+<!---third card --->
+<div class="card mx-auto text-white bg-steel mb-3" style="max-width: 30rem;">
+  <div class="card-body">
+    <h5 class="card-title">Add .pdf</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+  <a href="{% url 'document_extraction-extraction_upload_file' %}" class="btn btn-block btn-primary">Continue</a>
+</div>
+{% endblock content %}
