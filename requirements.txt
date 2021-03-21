@@ -30,7 +30,7 @@ django-environ==0.4.5
 django-extensions==2.2.9
 django-filter==2.4.0
 django-storages==1.10
-djangorestframework==3.11.1
+djangorestframework==3.11.2
 docutils==0.15.2
 en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-2.3.1/en_core_web_md-2.3.1.tar.gz
 funcy==1.15
