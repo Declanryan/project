@@ -1,7 +1,9 @@
-{% extends "document_summary/base.html" %}
+{% extends "topic_extraction/base.html" %}
 {% block content %}
 {% load static %}
-<div class="container">
+
+<h2>{{ request.user.username}}</h2>
+
 <table class="table">
 	<thead>
 		<tr>
@@ -13,6 +15,8 @@
 			<th>View</th>
 			<th>Delete</th>
 			<th>Select</th>
+
+			
 
 		</tr>
 	</thead>
@@ -29,26 +33,27 @@
 				view</a>
 			</td>
 			<td>
-				<form method="post" action="{% url 'document_summary-summary_delete_docs' doc.pk %}">
+				<form method="post" action="{% url 'topic_extraction-topic_delete_docs' doc.pk %}">
 					{% csrf_token %}
 					<button type="submit" class="btn btn-danger btn-sm">Delete</button>
 				</form>
 					
 			</td>
 			<td>
-				<form method="post" action="{% url 'document_summary-summary_select_doc' doc.pk %}">
+				<form method="post" action="{% url 'topic_extraction-topic_read_csv_doc' doc.pk %}">
 					{% csrf_token %}
 					<button type="submit" class="btn btn-success btn-sm">Select</button>
 				</form>
 					
 			</td>
+			
 		</tr>
 		{% endfor%}
-		
+		</div class="row">
+      <a class="btn btn-primary" href="{% url 'topic_extraction-topic_csv_upload_file' %}">&laquo; Upload</a>
+      <a class="btn btn-primary" href="{% url 'topic_extraction-topic_display_csv_text' %}" style="float:right;">View Sample &raquo;</a>
+  </div>
 	</tbody>	
 </table>
-</div>
-</div>
-
-
+  
 {% endblock content %}

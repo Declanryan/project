@@ -98,7 +98,7 @@ function SidebarCollapse () {
 
 </script>
 <!-- Bootstrap row -->
-<div class="row" id="body-row">
+<div class="row" id="body-row" style="background-color: #333;">
     <!-- Sidebar -->
     <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
         <!-- d-* hiddens the Sidebar in smaller devices. Its itens can be kept on the Navbar 'Menu' -->
@@ -112,7 +112,7 @@ function SidebarCollapse () {
             <!-- Menu with submenu -->
             <a href="#submenu1" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-dashboard fa-fw mr-3"></span>
+                   <span class="fa fa-bars fa-fw mr-3"></span>
                     <span class="menu-collapsed">Options</span>
                     <span class="submenu-icon ml-auto"></span>
                 </div>
@@ -120,11 +120,11 @@ function SidebarCollapse () {
             <!-- Submenu content -->
             <div id='submenu1' class="collapse sidebar-submenu">
                 <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
-                    <span class="fas fa-cloud-upload-alt"></span>
+                    <span class="fa fa-cloud fa-fw mr-3"></span>
                     <span class="menu-collapsed">Save Result</span>
                 </a>
                 <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
-                    <i class="fas fa-cloud-download-alt"></i>
+                    <i class="fa fa-cloud-download fa-fw mr-3"></i>
                     <span class="menu-collapsed">Download file</span>
                 </a>
                 <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
@@ -133,18 +133,20 @@ function SidebarCollapse () {
             </div>
             <a href="#submenu2" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-user fa-fw mr-3"></span>
-                    <span class="menu-collapsed">Profile</span>
+                    <span class="fa fa-map fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Navigation</span>
                     <span class="submenu-icon ml-auto"></span>
                 </div>
             </a>
             <!-- Submenu content -->
             <div id='submenu2' class="collapse sidebar-submenu">
-                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
-                    <span class="menu-collapsed">**option**</span>
+                <a href="{% url 'document_classification-csv_preview_file' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="fa fa-link fa-fw mr-3"></span>
+                    <span class="menu-collapsed">CSV Docs</span>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
-                    <span class="menu-collapsed">**option**</span>
+                <a href="{% url 'document_classification-display_csv_text' %}" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="fa fa-link fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Doc Preview</span>
                 </a>
             </div>
             <a href="#" class="bg-dark list-group-item list-group-item-action">
@@ -160,7 +162,7 @@ function SidebarCollapse () {
             <!-- /END Separator -->
             <a href="{% url 'post-create' %}" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-calendar fa-fw mr-3"></span>
+                    <span class="fa fa-edit fa-fw mr-3"></span>
                     <span class="menu-collapsed">Create Post</span>
                 </div>
             </a>
@@ -198,25 +200,23 @@ function SidebarCollapse () {
 
   function drawTable() {
     var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Content');
-    data.addColumn('string', 'Result');
-    data.addColumn('string', 'Result_Label');
+    data.addColumn('string', 'Document');
+    data.addColumn('number', 'Doc length');
+    data.addColumn('string', 'Summary');
+    data.addColumn('number', 'Sum length');
     data.addRows([
-      ['{{ json_data.content.0|truncatewords:"10" }}', '{{ json_data.Result.0 }}', '{{ json_data.Result_Label.0 }}'],
-      ['{{ json_data.content.1|truncatewords:"10" }}', '{{ json_data.Result.1 }}', '{{ json_data.Result_Label.1 }}'],
-      ['{{ json_data.content.2|truncatewords:"10" }}', '{{ json_data.Result.2 }}', '{{ json_data.Result_Label.2 }}'],
-      ['{{ json_data.content.3|truncatewords:"10" }}', '{{ json_data.Result.3 }}', '{{ json_data.Result_Label.3 }}'],
-      ['{{ json_data.content.4|truncatewords:"10" }}', '{{ json_data.Result.4 }}', '{{ json_data.Result_Label.4 }}'],
-      ['{{ json_data.content.5|truncatewords:"10" }}', '{{ json_data.Result.5 }}', '{{ json_data.Result_Label.5 }}'],
-      ['{{ json_data.content.6|truncatewords:"10" }}', '{{ json_data.Result.6 }}', '{{ json_data.Result_Label.6 }}'],
-      ['{{ json_data.content.7|truncatewords:"10" }}', '{{ json_data.Result.7 }}', '{{ json_data.Result_Label.7 }}'],
-      ['{{ json_data.content.8|truncatewords:"10" }}', '{{ json_data.Result.8 }}', '{{ json_data.Result_Label.8 }}'],
-      ['{{ json_data.content.9|truncatewords:"10" }}', '{{ json_data.Result.9 }}', '{{ json_data.Result_Label.9 }}'],
-      ['{{ json_data.content.10|truncatewords:"10" }}', '{{ json_data.Result.10 }}', '{{ json_data.Result_Label.10 }}'],
-      ['{{ json_data.content.11|truncatewords:"10" }}', '{{ json_data.Result.11 }}', '{{ json_data.Result_Label.11 }}'],
-      ['{{ json_data.content.12|truncatewords:"10" }}', '{{ json_data.Result.12 }}', '{{ json_data.Result_Label.12 }}'],
-      ['{{ json_data.content.13|truncatewords:"10" }}', '{{ json_data.Result.13 }}', '{{ json_data.Result_Label.13 }}'],
-      
+      ['{{ documents.0|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.0 }}'), '{{ json_data.Result.0|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.0 }}')],
+      ['{{ documents.1|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.1 }}'), '{{ json_data.Result.1|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.1 }}')],
+      ['{{ documents.2|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.2 }}'), '{{ json_data.Result.2|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.2 }}')],
+      ['{{ documents.3|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.3 }}'), '{{ json_data.Result.3|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.3 }}')],
+      ['{{ documents.4|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.4 }}'), '{{ json_data.Result.4|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.4 }}')],
+      ['{{ documents.5|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.5 }}'), '{{ json_data.Result.5|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.5 }}')],
+      ['{{ documents.6|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.6 }}'), '{{ json_data.Result.6|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.6 }}')],
+      ['{{ documents.7|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.7 }}'), '{{ json_data.Result.7|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.7 }}')],
+      ['{{ documents.8|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.8 }}'), '{{ json_data.Result.8|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.8 }}')],
+      ['{{ documents.9|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.9 }}'), '{{ json_data.Result.9|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.9 }}')],
+      ['{{ documents.10|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.10 }}'), '{{ json_data.Result.10|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.10 }}')],
+      ['{{ documents.11|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.11 }}'), '{{ json_data.Result.11|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.11 }}')] 
 
     ]);
 
@@ -232,21 +232,22 @@ function SidebarCollapse () {
     data.addColumn('string', 'Result');
     data.addColumn('number', 'Value');
     data.addRows([
-      ['Positive', parseInt('{{ json_data.Result_totals.0 }}')],
-      ['Neutral', parseInt('{{ json_data.Result_totals.2 }}')],
-      ['Negative', parseInt('{{ json_data.Result_totals.1 }}')]
+      ['Total Documents', parseInt('{{ json_data.Total_docs }}')],
+      ['Documents not summarized', parseInt('{{ json_data.Docs_not_summarized }}')],
+      ['Documents summarized', parseInt('{{ json_data.Docs_summarized }}')],
+
     ]);
 
-  var piechart_options = {title:'Sentiment analysis of documents in csv file',
+  var piechart_options = {title:'Document summarization analysis',
           is3D:true,
-                 width:595,
-                 height:300};
+                 width:720,
+                 height:350};
   var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
   piechart.draw(data, piechart_options);
 
-  var barchart_options = {title:'Sentiment analysis of documents in csv file',
-                 width:595,
-                 height:300,
+  var barchart_options = {title:'Document summarization analysis',
+                 width:720,
+                 height:350,
                  legend: 'none'};
   var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
   barchart.draw(data, barchart_options);
@@ -254,16 +255,27 @@ function SidebarCollapse () {
 </script>
  
   
-    <div class="col-4">           
-      <div id="barchart_div"></div>
-      <div id="table_div" style="margin-top: 20px"></div>
+    <div class="col-10" >
+      <div class="row">           
+      <div id="barchart_div" style="margin: 20px;"></div>
+      <div id="piechart_div" style="margin: 20px;"></div>
     </div>
-    <div class="col-4">        
-      <div id="piechart_div"></div>
-      <textarea class="form-control z-depth-5" id="FormControlTextarea" style=" margin-top: 10px" rows="15" readonly>{{  json_data.Result_Label|default:"no data recieved" }}</textarea>           
+    <div class="row">        
+      <div id="table_div" style="margin-top: 20px; margin-left: 20px;"></div>
+          <ol>
+            {% for value in json_data.Topics_list %}
+                <li>{{value}}</li>
+            {% endfor %}
+            </ol>>
+        </div>           
     </div>
   
   
 </div><!-- body-row END -->
+
+  <!---
+    <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ spacy_output|safe }}" readonly></textarea>
+      <textarea class="form-control z-depth-5" id="FormControlTextarea" rows="11" placeholder="{{ displacy_output|safe }}" readonly></textarea>
+   --->
 
 {% endblock content %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.http import HttpResponse
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from .forms import upload_file_form, sentiments_form
 from .models import Sentiment_Documents
@@ -16,7 +16,7 @@ import json
 from spacy import displacy
 from io import StringIO
 from pprint import pprint
-from .tasks import my_task, sentiment_check_task
+from .tasks import sentiment_test_task, sentiment_check_task
 from celery import Celery
 from celery.result import AsyncResult
 from django_project.celery import app
@@ -181,19 +181,7 @@ def sentiment_results_page(request):
     result_id= request.session['result']# define result
     result = AsyncResult(result_id, app=app)# get the result of the task
     data_str = result.get()
-    
-    #data = pd.DataFrame(list(my_dict.items()),columns = ['content','Result', 'Result_'])
-    
-    #data = pd.read_csv(StringIO(data_str), delimiter=",", skip_blank_lines=True, names=['content', 'Result', 'Result_Label'], header=0)
-    #data=pd.read_csv(StringIO(data_str), sep=",",
-    #names=['content', 'Result', 'Result_Label'], skip_blank_lines=True, skipinitialspace=True, engine='python', header=0)
-    #print(data)
-    
-    #print(data.info)
-    #print(data['content'])
     json_data = json.loads(data_str)
-    #data = pd.DataFrame(list(json_data.items()),columns = ['content','Result'])
-    #print(type(json_data))
     print(json_data)
     if request.method == 'POST':
             return render(request, 'document_sentiment/sentiment_results_page.html', {'json_data':json_data})

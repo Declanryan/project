@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from .forms import upload_file_form, summary_form
 from .models import Summary_Documents
@@ -9,14 +10,12 @@ from botocore.config import Config
 import time, os, sys
 from gensim import summarization
 from gensim.summarization.summarizer import summarize
-summarization.summarizer.INPUT_MIN_LENGTH=0
 import pandas as pd
 import spacy
 import json
-
 from io import StringIO
 from pprint import pprint
-#from .tasks import my_task, sentiment_check_task
+from .tasks import summary_test_task, summary_summarize_task
 from celery import Celery
 from celery.result import AsyncResult
 from django_project.celery import app
@@ -60,7 +59,7 @@ def check_summary(request):
             # result = 'success'
             #form.summary = result
             # form.save() # option to save to database
-            print(result)
+            # print(result) testing
             
             messages.success(request, f'Text Summarization Complete!')
             return render(request, 'document_summary/summary_form.html', {'form':form, 'result':result})          
@@ -78,27 +77,27 @@ def check_summary_csv(request):
     if request.method == 'POST':
         try:
             pk =  request.session['pk']# get the file key
-            doc = Sentiment_Documents.objects.get(pk=pk)# get the document ref from the database  
+            doc = Summary_Documents.objects.get(pk=pk)# get the document ref from the database  
             documentName = str(doc.document)# get the name of the doc 
-            appended_doc_name = append_name(documentName, "result.csv")# create new name for result doc 
+            #appended_doc_name = append_name(documentName, "result.csv")# create new name for result doc 
 
-            result= sentiment_check_task.delay(pk) # send to celery worker
-
+            result= summary_summarize_task.delay(pk) # send to celery worker
+            
             request.session['result'] = result.id # get the id of the task for retrival from storage
 
-            docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
-            return render(request, 'document_summary/summary_progress_csv.html', context={'task_id': result.task_id, 'docs':docs})
+            docs = Summary_Documents.objects.filter(author=request.user.id, document__contains=".csv")
+            return render(request, 'document_summary/summary_progress_csv.html', context={'task_id': result.task_id})
         except:
             messages.error(request, f'unable to process file')
-            docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
+            docs = Summary_Documents.objects.filter(author=request.user.id, document__contains=".csv")
             return render(request, 'document_summary/summary_preview_data_file.html', {'docs':docs})
     else:
-        docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
+        docs = Summary_Documents.objects.filter(author=request.user.id, document__contains=".csv")
         return render(request, 'document_summary/summary_preview_data_file.html', {'docs':docs})
 
 @login_required
 def summary_preview_data_file(request):
-    docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
+    docs = Summary_Documents.objects.filter(author=request.user.id, document__contains=".csv")
     return render(request, 'document_summary/summary_preview_data_file.html', {'docs':docs})
 
 def check_file(request, pk, filename):
@@ -106,14 +105,14 @@ def check_file(request, pk, filename):
 
     if ext == '.csv':
         request.session['pk'] = pk        
-        doc = Sentiment_Documents.objects.get(pk=pk)# get the document ref from the database
+        doc = Summary_Documents.objects.get(pk=pk)# get the document ref from the database
         documentName = str(doc.document)# get the real name of the doc     
         aws_id = os.environ.get('AWS_ACCESS_KEY_ID')
         aws_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
         REGION = 'eu-west-1'
         client = boto3.client('s3', region_name = REGION, aws_access_key_id=aws_id,
                 aws_secret_access_key=aws_secret)
-        bucket_name = "doc-sort-file-upload"
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
         object_key = documentName
         csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
         body = csv_obj['Body']
@@ -133,7 +132,7 @@ def check_file(request, pk, filename):
         REGION = 'eu-west-1'
         client = boto3.client('s3', region_name = REGION, aws_access_key_id=aws_id,
                 aws_secret_access_key=aws_secret)
-        bucket_name = "doc-sort-file-upload"
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
         object_key = documentName
         csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
         body = csv_obj['Body']
@@ -149,7 +148,7 @@ def check_file(request, pk, filename):
 @login_required
 def summary_select_doc(request, pk):
     if request.method == 'POST':# check for post request
-        doc = Sentiment_Documents.objects.get(pk=pk)# get the document ref from the database
+        doc = Summary_Documents.objects.get(pk=pk)# get the document ref from the database
         documentName = str(doc.document)# get the real name of the doc
         ext = check_file(request, pk, documentName)
         if ext == '.other': # check if doc is unsupported format
@@ -164,32 +163,41 @@ def summary_select_doc(request, pk):
 @login_required
 def summary_delete_docs(request, pk):
     if request.method == 'POST':
-        doc = Sentiment_Documents.objects.get(pk=pk)
+        doc = Summary_Documents.objects.get(pk=pk)
         doc.delete()
     return redirect('document_summary-summary_preview_data')
 
     
 @login_required
 def summary_results_page(request):
-    result_id= request.session['result']# define result
-    result = AsyncResult(result_id, app=app)# get the result of the task
-    data_str = result.get()
-    
-    #data = pd.DataFrame(list(my_dict.items()),columns = ['content','Result', 'Result_'])
-    
-    #data = pd.read_csv(StringIO(data_str), delimiter=",", skip_blank_lines=True, names=['content', 'Result', 'Result_Label'], header=0)
-    #data=pd.read_csv(StringIO(data_str), sep=",",
-    #names=['content', 'Result', 'Result_Label'], skip_blank_lines=True, skipinitialspace=True, engine='python', header=0)
-    #print(data)
-    
-    #print(data.info)
-    #print(data['content'])
-    json_data = json.loads(data_str)
-    #data = pd.DataFrame(list(json_data.items()),columns = ['content','Result'])
-    #print(type(json_data))
-    print(json_data)
     if request.method == 'POST':
-            return render(request, 'document_summary/summary_results_page.html', {'json_data':json_data})
+        result_id = request.session['result']# define result
+        result = AsyncResult(result_id, app=app)# get the result of the task
+        json_data = result.get()
+        # print(data) # testing
+        pk = request.session['pk']
+        doc = Summary_Documents.objects.get(pk=pk)# get the document ref from the database
+        documentName = str(doc.document)# get the real name of the doc
+
+        aws_id = settings.AWS_ACCESS_KEY_ID# AWS ACCESS
+        aws_secret = settings.AWS_SECRET_ACCESS_KEY
+        REGION = 'eu-west-1'
+
+        client = boto3.client('s3', region_name = REGION, aws_access_key_id=aws_id,
+                aws_secret_access_key=aws_secret)
+
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+
+        object_key = documentName
+        csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
+        body = csv_obj['Body']
+        csv_string = body.read().decode('utf-8')
+
+        data = pd.read_csv(StringIO(csv_string)) #CREATE DATAFRAME FROM CSV
+
+        documents = data['content'] # assign docs to content
+
+        return render(request, 'document_summary/summary_results_page.html', {'documents':documents, 'json_data':json_data})
     else:
          docs = Sentiment_Documents.objects.filter(author=request.user.id, document__contains=".csv")
     return render(request, 'document_summary/summary_preview_data_file.html', {'docs':docs})

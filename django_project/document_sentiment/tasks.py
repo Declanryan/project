@@ -31,7 +31,7 @@ def append_name(filename, type):
     return "{file_name}_{text}".format(file_name=name, text=type)# add extracted to name and .csv extension
 
 @shared_task(bind=True)
-def my_task(self, seconds):
+def sentiment_test_task(self, seconds):
     progress_recorder = ProgressRecorder(self)
     result = 0
     for i in range(seconds):
@@ -66,10 +66,11 @@ def sentiment_check_task(self, pk):
 	
 	nlp = stanza.Pipeline(lang='en', processors='tokenize, sentiment')# initiate stanza pipeline
 	filter_list = create_filter_list(data) # remove stop words from sentences and create a list of the filterd sentences
-	result_neg = 0
+
+	result_neg = 0 # count for total no of results
 	result_pos = 0
 	result_neut = 0
-	result = [] # new colum to hold result integer (0,1,2)value
+	result = [] # new column to hold result integer (0,1,2)value
 	result_str = [] # new column to hold result string value
 	result_totals = []
 	count = 0
@@ -91,8 +92,8 @@ def sentiment_check_task(self, pk):
 	            result_str.append("Positive")
 	            result_pos += 1
 	    
-	    progress_recorder.set_progress(count +1, len(filter_list))
-	    count +=1
+	    progress_recorder.set_progress(count +1, len(filter_list)) # update progress
+	    count +=1 # update count
 
 	
 	result_totals[0] = result_pos

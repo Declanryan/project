@@ -27,7 +27,7 @@ def extraction_upload_file(request):
         form.instance.author = request.user
         if form.is_valid():
             form.save()
-            return redirect('document_extraction-extract_preview_file')
+            return redirect('document_extraction-extraction_preview_file')
     else:
         form = upload_file_form()
     return render(request, 'document_extraction/extraction_upload_file.html', {'form': form})
@@ -41,9 +41,9 @@ def extraction_preview_file(request):
 @login_required
 def extraction_delete_docs(request, pk):
     if request.method == 'POST':
-        doc = Extraction__Documents.objects.get(pk=pk)
+        doc = Extraction_Documents.objects.get(pk=pk)
         doc.delete()
-    return redirect('document_extraction-extraction_preview_data')
+    return redirect('document_extraction-extraction_preview_file')
 
 def extraction_append_name(filename, type):
     name, ext = os.path.splitext(filename)# split the filename
@@ -106,25 +106,25 @@ def extraction_select_doc(request, pk):
     if request.method == 'POST':# check for post request
         doc = Extraction_Documents.objects.get(pk=pk)# get the document ref from the database
         documentName = str(doc.document)# get the real name of the doc
-        ext = check_file(request, pk, documentName)
+        ext = extraction_check_file(request, pk, documentName)
         if ext == '.other': # check if doc is unsupported format
             messages.error(request, f'Please use an extracted file format such as .txt, .csv or begin extraction process on a new file')
-            return redirect('document_extraction-extraction__preview_file')
+            return redirect('document_extraction-extraction_preview_file')
         else:
             return redirect('document_extraction-extraction_display_extracted_text')
     else:
         messages.error(request, f'unable to process file')
-    return render(request, 'document_extraction-extraction__preview_file.html')
+    return render(request, 'document_extraction-extraction_preview_file.html')
     
 @login_required
 def extraction_extract_doc(request, pk):
     if request.method == 'POST':# check for post request
         doc = Extraction_Documents.objects.get(pk=pk)# get the document ref from the database
         documentName = str(doc.document)# get the real name of the doc
-        ext = check_extension(documentName)
+        ext = extraction_check_extension(documentName)
         request.session['pk'] = pk
         if ext == '.pdf': # check if doc is a pdf
-            extract_doc_name = append_name(documentName, "extracted")# create new name for extracted doc
+            extract_doc_name = extraction_append_name(documentName, "extracted")# create new name for extracted doc
             content = extract_pdf_docs(request, pk)
             request.session['content'] = content
             s3 = boto3.resource('s3')        
@@ -133,7 +133,7 @@ def extraction_extract_doc(request, pk):
             extraxt_doc.save()
             return redirect('document_extraction-extraction_display_extracted_text')
         else:
-            extract_doc_name = append_name(documentName, "extracted")# create new name for extracted doc
+            extract_doc_name = extraction_append_name(documentName, "extracted")# create new name for extracted doc
             content = "" 
             my_config = Config(# configuration of client for s3 retrieval
             region_name = 'eu-west-1', signature_version = 'v4',

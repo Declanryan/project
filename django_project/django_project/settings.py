@@ -32,11 +32,13 @@ ALLOWED_HOSTS = ['192.168.0.192','localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'doc_api.apps.DocApiConfig',
+    'django_project',
     'document_classification',
     'document_extraction',
     'document_sentiment',
     'document_indexing',
     'document_summary',
+    'topic_extraction',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
     'crispy_forms',
@@ -149,7 +151,7 @@ MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'document_classification-home'
+LOGIN_REDIRECT_URL = 'django_project-home'
 LOGIN_URL = 'login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -171,7 +173,7 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-CELERY_BROKER_URL='redis://:pccc9fd9f957a3e29ea98c916eca4fbf0dfe973030bbd8efc8100cef3f8fe79b5@ec2-34-253-153-240.eu-west-1.compute.amazonaws.com:6379'
+CELERY_BROKER_URL='redis://:pccc9fd9f957a3e29ea98c916eca4fbf0dfe973030bbd8efc8100cef3f8fe79b5@ec2-54-195-205-20.eu-west-1.compute.amazonaws.com:30969'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'django-db'

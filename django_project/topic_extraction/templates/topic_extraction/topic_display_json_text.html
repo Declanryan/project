@@ -1,0 +1,88 @@
+{% extends "topic_extraction/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+ <div class="container">
+<h3 class="text-center">Topic Extraction</h3>
+<!---first card --->
+ <div class="row" style="margin-top:50px;">
+      <div class="col-md-6">
+        <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
+          <div class="card-body">
+            <div class="form-group shadow-textarea">
+            <p for="FormControlTextarea" class="text-center">Extracted text sample</p>
+            <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="7" placeholder="{{request.session.content }}" ></textarea>
+            </div>
+          </div>
+            <form method="post" action="{% url 'topic_extraction-topic_csv_preview_file' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-block ">&laquo; New selection</button>
+              </form>
+          <div>
+              
+              <div>
+            </div>
+          </div>
+    
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
+          <div class="card-body">
+            <div><p>You tell the algorithm how many topics you think there are. You can either use an informed estimate (e.g. results from a previous analysis), or simply trial-and-error. In trying different estimates, you may pick the one that generates topics to your desired level of interpretability, or the one yielding the highest statistical certainty. In order to begin the extraction process please highlight the total no of topics you would like to extract ftom the corpus below and click Topic extraction!</p></div>
+          <form method="post" action="{% url 'topic_extraction-topic_extraction' %}">
+            {% csrf_token %}
+            {{ form|crispy}}
+            <button type="submit" class="btn btn-primary btn-block" style="float:right;">Topic extraction &raquo;</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+    
+
+    {% endblock content %}
+{% extends "topic_extraction/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+ <div class="container">
+<h3 class="text-center">Topic Extraction</h3>
+<!---first card --->
+ <div class="row" style="margin-top:50px;">
+      <div class="col-md-6">
+        <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
+          <div class="card-body">
+            <div class="form-group shadow-textarea">
+            <p for="FormControlTextarea" class="text-center">Extracted text sample</p>
+            <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="7" placeholder="{{request.session.content }}" ></textarea>
+            </div>
+          </div>
+            <form method="post" action="{% url 'topic_extraction-topic_csv_preview_file' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-block ">&laquo; New selection</button>
+              </form>
+          <div>
+              
+              <div>
+            </div>
+          </div>
+    
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
+          <div class="card-body">
+            <div><p>You tell the algorithm how many topics you think there are. You can either use an informed estimate (e.g. results from a previous analysis), or simply trial-and-error. In trying different estimates, you may pick the one that generates topics to your desired level of interpretability, or the one yielding the highest statistical certainty. In order to begin the extraction process please highlight the total no of topics you would like to extract ftom the corpus below and click Topic extraction!</p></div>
+          <form method="post" action="{% url 'topic_extraction-topic_extraction' %}">
+            {% csrf_token %}
+            {{ form|crispy}}
+            <button type="submit" class="btn btn-primary btn-block" style="float:right;">Topic extraction &raquo;</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+    
+
+    {% endblock content %}

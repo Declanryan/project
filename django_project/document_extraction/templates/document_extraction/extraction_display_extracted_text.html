@@ -12,14 +12,64 @@
             <textarea class="form-control z-depth-1" id="FormControlTextarea" rows="10" placeholder="{{ request.session.content }}" readonly></textarea>
             </div>
             
-              <a class="btn btn-primary" style="margin-left: 100px;" href="{% url 'document_extraction-extraction_preview_file' %}">&laquo; Extract More</a>
-              <a class="btn btn-primary" href="#">Add to file &raquo;</a>
+              <button class="btn btn-primary" style="margin-left: 100px;" href="{% url 'document_extraction-extraction_preview_file' %}" data-toggle="popover" title="Click to return to file selection.">&laquo; Extract More</button>
+
+              <button class="btn btn-primary" title="Click to add text to existing file." data-toggle="modal" data-target="#exampleModalCenter">Add to file &raquo;</button>
             
           </div>
     
         </div>
       </div>
+      <!-- Button trigger modal -->
+        
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">File selection</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th>Document</th>
+                              <th>Selection</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for doc in docs%}
+                            <tr> 
+                              <td>{{ doc.document }}</td>
+                              <td>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                  <label class="form-check-label" for="flexRadioDefault1">
+                                    Select
+                                  </label>
+                                </div>
+                              </td>
+      
+                            </tr>
+                            {% endfor%}
+                          </tbody>  
+
+                        </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info">New File</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
       <div class="col-md-4 ">
+
         <table class="table">
   <thead>
     <tr>
@@ -37,12 +87,12 @@
       <td>{{ doc.uploaded_at }}</td>
       <td>{{ doc.document }}</td>
       <td>
-        <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank">Download</a>
+        <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank" data-toggle="popover" title="Click to download file">Download</a>
       </td>
       <td>
-        <form method="post" action="{% url 'document_extraction-select_doc' doc.pk %}">
+        <form method="post" action="{% url 'document_extraction-extraction_select_doc' doc.pk %}">
           {% csrf_token %}
-          <button type="submit" class="btn btn-danger btn-sm">Select</button>
+          <button type="submit" class="btn btn-danger btn-sm" data-toggle="popover" title="Click to select new file">Select</button>
         </form>
           
       </td>

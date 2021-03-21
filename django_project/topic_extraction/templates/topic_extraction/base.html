@@ -1,4 +1,4 @@
- {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +10,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'document_indexing/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'topic_extraction/topic_main.css' %}">
+    <script src="https://kit.fontawesome.com/7fb0bcfffc.js" crossorigin="anonymous"></script>
 
     {% if title %}
         <title>Doc Sort- {{ title }}</title>
@@ -41,6 +42,7 @@
                 <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}
+                <a class="nav-item nav-link" href="{% url 'django_project-price_plan' %}">Plans</a>
                  <a class="nav-item nav-link" href="{% url 'django_project-price_plan' %}">Plans</a>
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
@@ -50,7 +52,7 @@
         </div>
       </nav>
     </header>
-    <main role="main" class="container">
+    <main role="main" class="container-fluid">
       <div class="row">
         <div class="col-lg">
           {% if messages %}<!-- Check if there is a message -->

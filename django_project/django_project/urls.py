@@ -18,9 +18,16 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
+from . import views
+
+# url list od paths within application
 
 urlpatterns = [
+    path('', views.home, name='django_project-home'),
+    path('price_plan', views.price_plan, name='django_project-price_plan'),
+    path('choose_model', views.choose_model, name='django_project-choose_model'),
     path('admin/', admin.site.urls, name='admin'),
+    path('about/', views.about, name='django_project-about'),
     path('register/', user_views.register, name='register'),
     path('profile/', user_views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
@@ -52,6 +59,7 @@ urlpatterns = [
     path('', include('document_sentiment.urls')),
     path('', include('document_summary.urls')),
     path('', include('document_extraction.urls')),
+    path('', include('topic_extraction.urls')),
     re_path(r'^celery-progress/', include('celery_progress.urls')),  # the endpoint is configurable
 ]
 

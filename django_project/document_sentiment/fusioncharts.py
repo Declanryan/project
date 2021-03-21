@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+rom django.http import HttpResponse
 import json
 from collections import OrderedDict
 from io import StringIO
