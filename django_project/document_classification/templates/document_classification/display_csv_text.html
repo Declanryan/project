@@ -18,7 +18,6 @@
                 <button type="submit" class="btn btn-danger btn-block ">&laquo; New selection</button>
               </form>
           <div>
-              
               <div>
             </div>
           </div>
@@ -29,16 +28,14 @@
         <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
           <div class="card-body">
             <div><p>You tell the algorithm how many topics you think there are. You can either use an informed estimate (e.g. results from a previous analysis), or simply trial-and-error. In trying different estimates, you may pick the one that generates topics to your desired level of interpretability, or the one yielding the highest statistical certainty. In order to begin the extraction process please highlight the total no of topics you would like to extract ftom the corpus below and click Topic extraction!</p></div>
-          <form method="post" action="{% url 'document_classification-topic_extraction' %}">
+          <form method="post" action="#">
             {% csrf_token %}
             {{ form|crispy}}
-            <button type="submit" class="btn btn-primary btn-block" style="float:right;">Topic extraction &raquo;</button>
+            <button type="submit" class="btn btn-primary btn-block" style="float:right;">Begin Classification &raquo;</button>
       </form>
     </div>
   </div>
 </div>
 </div>
 </div>
-    
-
     {% endblock content %}

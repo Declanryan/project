@@ -247,14 +247,14 @@ function SidebarCollapse () {
       ['Topic 10', parseInt('{{ json_data.Topic_totals.9 }}')]
     ]);
 
-  var piechart_options = {title:'Result of automatic topic extraction by %',
+  var piechart_options = {title:'% of document assigned to each topic',
           is3D:true,
                  width:750,
                  height:350};
   var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
   piechart.draw(data, piechart_options);
 
-  var barchart_options = {title:'Result of automatic topic extraction by value',
+  var barchart_options = {title:'TOtal documents assigned to each category',
                  width:750,
                  height:350,
                  legend: 'none'};

@@ -8,7 +8,6 @@ urlpatterns = [
     path('preview_data', views.preview_data, name='document_classification-preview_data'),
     path('results_page', views.results_page, name='document_classification-results_page'),
     path('tag_selection', views.tag_selection, name='document_classification-tag_selection'),
-    path('upload_confirmation', views.upload_confirmation, name='document_classification-upload_confirmation'),
     path('csv_upload_file', views.csv_upload_file, name='document_classification-csv_upload_file'),
     path('json_upload_file', views.json_upload_file, name='document_classification-json_upload_file'),
     path('csv_preview_file', views.csv_preview_file, name='document_classification-csv_preview_file'),

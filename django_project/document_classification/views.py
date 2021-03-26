@@ -80,12 +80,12 @@ def select_doc(request, pk):
         ext = check_file(request, pk, documentName)
         if ext == '.other': # check if doc is unsupported format
             messages.error(request, f'Please use an extracted file format such as .txt, .csv or begin extraction process on a new file')
-            return redirect('document_classification-extract_preview_file')
+            return redirect('document_classification-csv_preview_file')
         else:
-            return redirect('document_classification-display_extracted_text')
+            return redirect('document_classification-display_csv_text')
     else:
         messages.error(request, f'unable to process file')
-    return render(request, 'document_classification-extract_preview_file.html')
+    return render(request, 'document_classification-csv_preview_file.html')
     
 @login_required
 def json_upload_file(request):
