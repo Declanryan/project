@@ -45,9 +45,9 @@ def extraction_delete_docs(request, pk):
         doc.delete()
     return redirect('document_extraction-extraction_preview_file')
 
-def extraction_append_name(filename, type):
+def extraction_append_name(filename, text):
     name, ext = os.path.splitext(filename)# split the filename
-    return "{file_name}_{text}{ext}".format(file_name=name, text=type, ext=".txt")# add extracted to name and .txt extension
+    return "{file_name}_{text}{ext}".format(file_name=name, text=text, ext=".txt")# add extracted to name and .txt extension
 
 def extraction_check_extension(filename):
     name, ext = os.path.splitext(filename)# split the filename
@@ -159,7 +159,7 @@ def extraction_extract_doc(request, pk):
 
 @login_required
 def extraction_display_extracted_text(request):
-    docs = Extraction_Documents.objects.filter(author=request.user.id, document__contains="extracted")
+    docs = Extraction_Documents.objects.filter(author=request.user.id)
     return render(request, 'document_extraction/extraction_display_extracted_text.html', {'docs':docs})
 
 
@@ -168,9 +168,9 @@ def extract_pdf_docs(request, pk):
 
         doc = Extraction_Documents.objects.get(pk=pk)
         documentName = str(doc.document)# get the real name of the doc
-        s3BucketName = "doc-sort-file-upload"
-        extract_doc_name = append_name(documentName, "pdf")
-        extract_doc_name = append_name(documentName, "extracted")# create new name for extracted doc
+        s3BucketName = settings.AWS_STORAGE_BUCKET_NAME
+        #extract_doc_name = extraction_append_name(documentName, "pdf")
+        extract_doc_name = extraction_append_name(documentName, "extracted")# create new name for extracted doc
         content = "" 
 
         def startJob(s3BucketName, objectName):
@@ -252,4 +252,40 @@ def extract_pdf_docs(request, pk):
         return content
     else:
         messages.error(request, f'unable to extract text!')
-    return render(request, 'document_extraction_-extract_preview_file.html')
+    return render(request, 'document_extraction/extract_preview_file.html')
+
+
+def extraction_add_to_file(request):
+    if request.method == 'POST':# check for post request
+        pk = request.POST.get('flexRadioDefault')# get pk of file
+               
+        doc = Extraction_Documents.objects.get(pk=pk)# get the document ref from the database
+        documentName = str(doc.document)# get the real name of the doc     
+        aws_id = os.environ.get('AWS_ACCESS_KEY_ID') # get doc from aws s3
+        aws_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
+        REGION = 'eu-west-1'
+        client = boto3.client('s3', region_name = REGION, aws_access_key_id=aws_id,
+                aws_secret_access_key=aws_secret)
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+        object_key = documentName
+        csv_obj = client.get_object(Bucket=bucket_name, Key=object_key)
+        body = csv_obj['Body']
+        csv_string = body.read().decode('utf-8')# read in decoded bytes
+        data = pd.read_csv(StringIO(csv_string))
+        new_row = {'content':request.session['content']}# get new row
+        #append row to the dataframe
+        data = data.append(new_row, ignore_index=True)# add to dataframe
+        csv_buffer = StringIO()
+        data.to_csv(csv_buffer)
+        
+        # upload detected text file to s3
+        doc.delete() # delete existing document
+        s3 = boto3.resource('s3') # create client     
+        s3.Object(settings.AWS_STORAGE_BUCKET_NAME, documentName).put(Body=csv_buffer.getvalue()) # create object and upload
+        ammended_file = Extraction_Documents(username=request.user, description='extracted text', document=documentName, author=request.user) # create database entry
+        ammended_file.save() # save to database
+        messages.success(request, f'Data has been added to file and upload is complete') # send successful message to user
+        return render(request, 'django_project/choose_model.html')
+    else:
+        messages.error(request, f'unable to process file') # send error message to user
+        return render(request, 'django_project/choose_model.html')
