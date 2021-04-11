@@ -239,13 +239,13 @@ function SidebarCollapse () {
 
   var piechart_options = {title:'Sentiment analysis of documents in csv file',
           is3D:true,
-                 width:750,
+                 width:730,
                  height:350};
   var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
   piechart.draw(data, piechart_options);
 
   var barchart_options = {title:'Sentiment analysis of documents in csv file',
-                 width:750,
+                 width:730,
                  height:350,
                  legend: 'none'};
   var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));

@@ -175,7 +175,8 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-CELERY_BROKER_URL='redis://:pccc9fd9f957a3e29ea98c916eca4fbf0dfe973030bbd8efc8100cef3f8fe79b5@ec2-54-195-205-20.eu-west-1.compute.amazonaws.com:30969'
+# heroku redis teal
+CELERY_BROKER_URL='redis://redistogo:ab571ac70ef4c786dfd359badce114d8@soapfish.redistogo.com:11216/'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'django-db'

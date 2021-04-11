@@ -205,19 +205,16 @@ function SidebarCollapse () {
     data.addColumn('string', 'Summary');
     data.addColumn('number', 'Sum length');
     data.addRows([
-      ['{{ documents.0|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.0 }}'), '{{ json_data.Result.0|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.0 }}')],
-      ['{{ documents.1|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.1 }}'), '{{ json_data.Result.1|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.1 }}')],
-      ['{{ documents.2|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.2 }}'), '{{ json_data.Result.2|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.2 }}')],
-      ['{{ documents.3|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.3 }}'), '{{ json_data.Result.3|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.3 }}')],
-      ['{{ documents.4|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.4 }}'), '{{ json_data.Result.4|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.4 }}')],
-      ['{{ documents.5|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.5 }}'), '{{ json_data.Result.5|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.5 }}')],
-      ['{{ documents.6|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.6 }}'), '{{ json_data.Result.6|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.6 }}')],
-      ['{{ documents.7|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.7 }}'), '{{ json_data.Result.7|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.7 }}')],
-      ['{{ documents.8|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.8 }}'), '{{ json_data.Result.8|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.8 }}')],
-      ['{{ documents.9|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.9 }}'), '{{ json_data.Result.9|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.9 }}')],
-      ['{{ documents.10|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.10 }}'), '{{ json_data.Result.10|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.10 }}')],
-      ['{{ documents.11|truncatewords:"10" }}', parseInt('{{ json_data.Documents_len.11 }}'), '{{ json_data.Result.11|truncatewords:"25" }}', parseInt('{{ json_data.Summary_len.11 }}')] 
-
+      ['{{ documents.0|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.0 }}'), '{{ json_data.Result.0|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.0 }}')],
+      ['{{ documents.1|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.1 }}'), '{{ json_data.Result.1|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.1 }}')],
+      ['{{ documents.2|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.2 }}'), '{{ json_data.Result.2|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.2 }}')],
+      ['{{ documents.3|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.3 }}'), '{{ json_data.Result.3|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.3 }}')],
+      ['{{ documents.4|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.4 }}'), '{{ json_data.Result.4|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.4 }}')],
+      ['{{ documents.5|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.5 }}'), '{{ json_data.Result.5|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.5 }}')],
+      ['{{ documents.6|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.6 }}'), '{{ json_data.Result.6|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.6 }}')],
+      ['{{ documents.7|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.7 }}'), '{{ json_data.Result.7|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.7 }}')],
+      ['{{ documents.8|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.8 }}'), '{{ json_data.Result.8|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.8 }}')],
+      ['{{ documents.9|truncatewords:"15" }}', parseInt('{{ json_data.Documents_len.9 }}'), '{{ json_data.Result.9|truncatewords:"20" }}', parseInt('{{ json_data.Summary_len.9 }}')],
     ]);
 
 
@@ -238,17 +235,11 @@ function SidebarCollapse () {
 
     ]);
 
-  var piechart_options = {title:'Document summarization analysis',
-          is3D:true,
-                 width:720,
-                 height:350};
+  var piechart_options = {title:'Document summarization analysis', is3D:true, width:720, height:350};
   var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
   piechart.draw(data, piechart_options);
 
-  var barchart_options = {title:'Document summarization analysis',
-                 width:720,
-                 height:350,
-                 legend: 'none'};
+  var barchart_options = {title:'Document summarization analysis', width:720, height:350,legend: 'none'};
   var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
   barchart.draw(data, barchart_options);
 }

@@ -23,7 +23,7 @@ import json
 from django.contrib import messages
 from django.conf import settings
 
-@shared_task(bind=True)
+@shared_task(bind=True) # used for testing progress recorder integration with topic module
 def topic_test_task(self, seconds):
     progress_recorder = ProgressRecorder(self)
     result = 0
@@ -39,7 +39,7 @@ def topic_test_task(self, seconds):
 
 @shared_task(bind=True)
 def extract_topics(self, pk, topics):
-	progress_recorder = ProgressRecorder(self) 
+	progress_recorder = ProgressRecorder(self) # create progress recorder instance
 	doc = Topic_extraction_Documents.objects.get(pk=pk)# get the document ref from the database
 	documentName = str(doc.document)# get the real name of the doc
 
@@ -125,7 +125,7 @@ def extract_topics(self, pk, topics):
 	# compare a docs results and find the higest probability
 	def topic_prediction(my_document):
 	    x = nlp(my_document)
-	    other_corpus = words.doc2bow(x) # convert to bow
+	    other_corpus = words.doc2bow(x) 
 	    output = list(lda_model[other_corpus])
 	    # print(output) # testing
 	    topics = sorted(output,key=lambda x:x[1],reverse=True)

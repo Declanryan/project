@@ -1,6 +1,29 @@
 {% extends "document_extraction/base.html" %}
 {% block content %}
 {% load static %}
+<style type="text/css">
+	.bd-example-modal-lg .modal-dialog{
+    display: table;
+    position: relative;
+    margin: 0 auto;
+    top: calc(50% - 24px);
+  }
+  
+  .bd-example-modal-lg .modal-dialog .modal-content{
+    background-color: transparent;
+    border: none;
+  }
+
+</style>
+<script type="text/javascript">
+	
+	function modal(){
+       $('.modal').modal('show');
+       setTimeout(function () {
+       	$('.modal').modal('hide');
+       });
+    }
+</script>
 <div class="container" style="margin-top: 50px;">
 <table class="table">
 	<thead>
@@ -41,7 +64,7 @@
 			<td>
 				<form method="post" action="{% url 'document_extraction-extraction_extract_doc' doc.pk %}">
 					{% csrf_token %}
-					<button type="submit" class="btn btn-info btn-sm" data-toggle="popover" title=" Click to extract the text from the image!">Extract</button>
+					<button type="submit" id="btnfetch" class="btn btn-info btn-sm" data-toggle="popover" title=" Click to extract the text from the image!" onclick="modal();">Extract</button>
 				</form>
 					
 			</td>
@@ -56,12 +79,21 @@
 			
 		</tr>
 		{% endfor%}
-		</div class="row">
+		
      
-  </div>
+ 
 	</tbody>
 	 
 </table>
+  <!--- modal loader --->
+<div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" style="width: 48px">
+            <span class="fa fa-spinner fa-spin fa-3x"></span>
+            <h3>Processing</h3>
+        </div>
+    </div>
+</div>
   </div>
-
+<!--- end loader --->
 {% endblock content %}

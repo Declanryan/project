@@ -148,7 +148,7 @@ def topic_display_json_text(request):
     docs = Topic_extraction_Documents.objects.filter(author=request.user.id, document__contains="json")
     return render(request, 'topic_extraction/topic_display_extracted_json.html', {'docs':docs})
     
-@login_required
+@login_required # require login to be activated
 def topic_extraction(request):
 	if request.method == 'POST':
 		try:
@@ -156,12 +156,12 @@ def topic_extraction(request):
 			form = topic_extraction_form(request.POST)
 
 			if form.is_valid():
-				choice =form.cleaned_data['No_of_topics']
+				choice =form.cleaned_data['No_of_topics'] # gets the choice field entered
 				choice = int(choice[0])-1
 				topics = choices[choice]
 
 			pk = request.session['pk']
-			result = extract_topics.delay(pk, topics) # send to celery worker
+			result = extract_topics.delay(pk, topics) # send to celery worker for topic ectraction
 
 			request.session['result'] = result.id # get the id of the task for retrival from storage
 			#docs = Topic_extraction_Documents.objects.filter(author=request.user.id, document__contains=".csv")

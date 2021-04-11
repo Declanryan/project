@@ -20,7 +20,42 @@
     
         </div>
       </div>
-      <!-- Button trigger modal -->
+      <div class="col-md-4 ">
+
+        <table class="table">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Uploaded_at</th>
+      <th>Document</th>
+      <th>View</th>
+      <th>Select</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for doc in docs%}
+    <tr> 
+      <td>{{ doc.description }}</td>
+      <td>{{ doc.uploaded_at }}</td>
+      <td>{{ doc.document }}</td>
+      <td>
+        <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank" data-toggle="popover" title="Click to download file">Download</a>
+      </td>
+      <td>
+        <form method="post" action="{% url 'document_extraction-extraction_select_doc' doc.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-sm" data-toggle="popover" title="Click to select new file">Select</button>
+        </form>
+          
+      </td>
+    </tr>
+    {% endfor%}
+  </tbody>  
+
+</table>
+      </div>
+    </div>
+    <!-- Button trigger modal -->
         
 
         <!-- Modal -->
@@ -74,41 +109,6 @@
           </div>
         </div>
         <!--- end modal --->
-      <div class="col-md-4 ">
-
-        <table class="table">
-  <thead>
-    <tr>
-      <th>Description</th>
-      <th>Uploaded_at</th>
-      <th>Document</th>
-      <th>View</th>
-      <th>Select</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for doc in docs%}
-    <tr> 
-      <td>{{ doc.description }}</td>
-      <td>{{ doc.uploaded_at }}</td>
-      <td>{{ doc.document }}</td>
-      <td>
-        <a href="{{ doc.document.url }}" class="btn btn-primary btn-sm" target="_blank" data-toggle="popover" title="Click to download file">Download</a>
-      </td>
-      <td>
-        <form method="post" action="{% url 'document_extraction-extraction_select_doc' doc.pk %}">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger btn-sm" data-toggle="popover" title="Click to select new file">Select</button>
-        </form>
-          
-      </td>
-    </tr>
-    {% endfor%}
-  </tbody>  
-
-</table>
-      </div>
-    </div>
     </div>
 <!--- --->
 {% endblock content %}

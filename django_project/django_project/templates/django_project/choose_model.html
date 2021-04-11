@@ -5,7 +5,7 @@
   <div class="card-deck">
     <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
       <div class="card-body ">
-        <h4 class="card-text text-center">Classification</h4>
+        <h4 class="card-text text-center">Topic Extraction</h4>
         <hr style="height:2px;border-width:0;color:gray;background-color:white">
         <ul>
           <li><p class="card-text">Sort documents into predefined categories!</p></li>
@@ -13,7 +13,7 @@
           <li><p class="card-text">Use csv, json or txt documents!</p></li>
       </ul>
         <hr style="height:2px;border-width:0;color:gray;background-color:white">
-        <a href="{% url 'document_classification-import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select <i class="fas fa-angle-double-right"></i></a>
+        <a href="{% url 'topic_extraction-topic_import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select <i class="fas fa-angle-double-right"></i></a>
       </div>
     </div>
     <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
@@ -46,11 +46,11 @@
      <div class="card-deck">
     <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
       <div class="card-body ">
-        <h4 class="card-text text-center">Topic Extraction</h4>
+        <h4 class="card-text text-center">Entity Recognition</h4>
         <hr style="height:2px;border-width:0;color:gray;background-color:white">
         <ul>
-          <li><p class="card-text">Sort documents into predefined categories!</p></li>
-          <li><p class="card-text">Perform automatic topic extraction on your documents!</p></li>
+          <li><p class="card-text">Extract entitys from documents without having to read them!</p></li>
+          <li><p class="card-text">Use entitys to sort documents by entity type!</p></li>
           <li><p class="card-text">Use csv, json or txt documents!</p></li>
       </ul>
         <hr style="height:2px;border-width:0;color:gray;background-color:white">
@@ -59,15 +59,16 @@
     </div>
     <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
       <div class="card-body ">
-        <h4 class="card-text text-center">**** Option ****</h4>
+        <h4 class="card-text text-center">** Topic Classification **</h4>
         <hr style="height:2px;border-width:0;color:gray;background-color:white">
         <ul>
-           <li><p class="card-text">Test out our sentiment analyzer!</p></li>
-           <li><p class="card-text">perform sentiment analysis on multiple documents and get results for individual and overall!</p></li>
-           <li><p class="card-text">Use csv, json or txt documents!</p></li>
+          <li><p class="card-text">Sort documents into predefined categories!</p></li>
+          <li><p class="card-text">Input your topics and Perform classify your documents!</p></li>
+          <li><p class="card-text">Use csv, json or txt documents!</p></li>
+      </ul>
       </ul>
         <hr style="height:2px;border-width:0;color:gray;background-color:white">
-        <a href="{% url 'document_sentiment-sentiment_import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select <i class="fas fa-angle-double-right"></i></a>
+        <a href="{% url 'document_classification-import_data_type' %}" class="btn align-self-end btn-block btn-primary">Select <i class="fas fa-angle-double-right"></i></a>
       </div>
     </div>
     <div class="card mx-auto text-light bg-steel mb-3" style="max-width: 20rem;">
