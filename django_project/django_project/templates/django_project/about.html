@@ -1,4 +1,333 @@
 {% extends "django_project/base.html" %}
 {% block content %}
-<h3> TODO ABOUT</h3>
+<style type="text/css">
+  #body-row {
+    margin-left:0;
+    margin-right:0;
+}
+#sidebar-container {
+    min-height: 100vh;   
+    background-color: #333;
+    padding: 0;
+}
+
+/* Sidebar sizes when expanded and expanded */
+.sidebar-expanded {
+    width: 230px;
+}
+.sidebar-collapsed {
+    width: 60px;
+}
+
+/* Menu item*/
+#sidebar-container .list-group a {
+    height: 50px;
+    color: white;
+}
+
+/* Submenu item*/
+#sidebar-container .list-group .sidebar-submenu a {
+    height: 45px;
+    padding-left: 30px;
+}
+.sidebar-submenu {
+    font-size: 0.9rem;
+}
+
+/* Separators */
+.sidebar-separator-title {
+    background-color: #333;
+    height: 35px;
+}
+.sidebar-separator {
+    background-color: #333;
+    height: 25px;
+}
+.logo-separator {
+    background-color: #333;    
+    height: 60px;
+}
+
+/* Closed submenu icon */
+#sidebar-container .list-group .list-group-item[aria-expanded="false"] .submenu-icon::after {
+  content: " \f0d7";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 10px;
+}
+/* Opened submenu icon */
+#sidebar-container .list-group .list-group-item[aria-expanded="true"] .submenu-icon::after {
+  content: " \f0da";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 10px;
+}
+</style>
+<script type="text/javascript">
+  // Hide submenus
+$('#body-row .collapse').collapse('hide'); 
+
+// Collapse/Expand icon
+$('#collapse-icon').addClass('fa-angle-double-left'); 
+
+// Collapse click
+$('[data-toggle=sidebar-colapse]').click(function() {
+    SidebarCollapse();
+});
+
+function SidebarCollapse () {
+    $('.menu-collapsed').toggleClass('d-none');
+    $('.sidebar-submenu').toggleClass('d-none');
+    $('.submenu-icon').toggleClass('d-none');
+    $('#sidebar-container').toggleClass('sidebar-expanded sidebar-collapsed');
+    
+    // Treating d-flex/d-none on separators with title
+    var SeparatorTitle = $('.sidebar-separator-title');
+    if ( SeparatorTitle.hasClass('d-flex') ) {
+        SeparatorTitle.removeClass('d-flex');
+    } else {
+        SeparatorTitle.addClass('d-flex');
+    }
+    
+    // Collapse/Expand icon
+    $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
+}
+
+
+</script>
+<!-- Bootstrap row -->
+<div class="row " id="body-row">
+    <!-- Sidebar -->
+    <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
+        <!-- d-* hiddens the Sidebar in smaller devices. Its itens can be kept on the Navbar 'Menu' -->
+        <!-- Bootstrap List Group -->
+        <ul class="list-group">
+            <!-- Separator with title -->
+            <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                <small>MAIN MENU</small>
+            </li>
+            <!-- /END Separator -->
+            <!-- Menu with submenu -->
+            <a href="#submenu1" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-dashboard fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Features</span>
+                    <span class="submenu-icon ml-auto"></span>
+                </div>
+            </a>
+            <!-- Submenu content <a href="#Lorem_Ipsum">top</a>.-->
+            <div id='submenu1' class="collapse sidebar-submenu">
+                <a href="#Topic Extraction" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">Topic Extraction</span>
+                </a>
+                <a href="#Sentiment analysis" class="list-group-item list-group-item-action bg-dark text-white">                  
+                    <span class="menu-collapsed">Sentiment analysis</span>
+                </a>
+                <a href="#Document Extraction" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">Document Extraction</span>
+                </a>
+                <a href="#Summarisation" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">Summarisation</span>
+                </a>
+                <a href="#Entity Recognition" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">Entity Recognition</span>
+                </a>
+                <a href="#Topic Classification" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">Topic Classification</span>
+                </a>
+            </div>
+            
+            
+            <!-- Separator with title -->
+            <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
+                <small>Forum</small>
+            </li>
+            <!-- /END Separator -->
+            <a href="{% url 'post-create' %}" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-calendar fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Create Post</span>
+                </div>
+            </a>
+            <a href="#" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-envelope-o fa-fw mr-3"></span>
+                    <span class="menu-collapsed">View posts <span class="badge badge-pill badge-primary ml-2"></span></span>
+                </div>
+            </a>
+            <!-- Separator without title -->
+            <li class="list-group-item sidebar-separator menu-collapsed"></li>
+            <!-- /END Separator -->
+            <a href="#" class="bg-dark list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-question fa-fw mr-3"></span>
+                    <span class="menu-collapsed">Help</span>
+                </div>
+            </a>
+           
+        </ul><!-- List Group END-->
+    </div><!-- sidebar-container END -->
+
+  
+  
+  		<div class="card" style="margin-left: 20em;">
+		 
+		  <div class="card-body">
+		   
+		    
+		    	<!--- start topic --->
+		     <h5 class="card-title" id="Topic Extraction">Topic Extraction</h5>
+		     <hr>
+		    <img src="/static/site_images/documentation/topic_extraction/Picture1.png" alt="use case diagram" />
+	  		 <p>The user goes to the homepage and selects Explore.</p>
+	  		 <img src="/static/site_images/documentation/topic_extraction/Picture2.png" alt="home" />
+	  		 <p>The user chooses the required feature but must be registered and logged in to proceed.</p>
+	  		 <img src="/static/site_images/documentation/topic_extraction/Picture3.png" alt="choose feature" />
+	  		 <p>The user selects the file type to upload.</p>
+	  		 <img src="/static/site_images/documentation/topic_extraction/Picture4.png" alt="select file type" />
+	  		 <p>The user uploads files or proceeds to file preview and selection.</p>
+	  		 <img src="/static/site_images/documentation/topic_extraction/Picture5.png" alt="upload file" />
+	  		 <p>The user views the uploaded files and selects the required ones.</p>
+	  		 <img src="/static/site_images/documentation/topic_extraction/Picture6.png" alt="select file" />
+	  		 <p>The user selects the file and is shown a preview of the data as well as the topics selection button.</p>
+	  		 <img src="/static/site_images/documentation/topic_extraction/Picture7.png" alt="preview data" />
+	  		 <p>The user selects the no of Topics they would like to extract from the corpus.</p>
+	  		 <img src="/static/site_images/documentation/topic_extraction/Picture8.png" alt="progress indicator" />
+	  		 <p>When the processing is finished the user selects the view results</p>
+	  		 <img src="/static/site_images/documentation/topic_extraction/Picture9.png" alt="result screen" />
+	  		 <p>Above we have the results of a topic extraction on a 100 document corpus.</p>
+	  		 <ul>
+			<li>The results in the first panel show the distribution of documents to topic results in bar <br> 
+			chart form.</li>
+			<li>The second panel shows the distribution in a pie chart format.</li>
+			<li>The third panel shows the first 15 documents in the file, the first 10 words, and the topic <br> 
+			the document was assigned.</li>
+			<li>The fourth panel shows each of the topics and the word distribution that was extracted to make<br> 
+			 up that topic. </li>
+			</ul>
+			<p>The user then has the option of downloading the results in a CSV file or saving a copy to storage</p>
+			<br>
+			<hr>
+		     <!--- end topic --->
+
+		     <!--- start sentiment --->
+	  		 <h5 class="card-title" id="Sentiment analysis">Sentiment analysis</h5>
+	  		 <hr>
+	  		 <img src="/static/site_images/documentation/sentiment_analysis/Picture1.png" alt="use case diagram" />
+	  		 <p>The user goes to the homepage and selects Explore.</p>
+	  		 <img src="/static/site_images/documentation/sentiment_analysis/Picture2.png" alt="home" />
+	  		 <p>The user chooses the required feature but must be registered and logged in to proceed.</p>
+	  		 <img src="/static/site_images/documentation/sentiment_analysis/Picture3.png" alt="choose feature" />
+	  		 <p>The user selects the file type to upload.</p>
+	  		 <img src="/static/site_images/documentation/sentiment_analysis/Picture4.png" alt="select file type" />
+	  		 <p>The user uploads files or proceeds to file preview and selection.</p>
+	  		 <img src="/static/site_images/documentation/sentiment_analysis/Picture5.png" alt="upload file" />
+	  		 <p>The user views the uploaded files and selects the required ones.</p>
+	  		 <img src="/static/site_images/documentation/sentiment_analysis/Picture6.png" alt="select file" />
+	  		 <p>The user previews the selected data and decides to activate the sentiment analysis or to <br> 
+	  		 return to file selection</p>
+	  		 <img src="/static/site_images/documentation/sentiment_analysis/Picture7.png" alt="preview data" />
+	  		 <p>After the analysis is complete the user selects the view result and is brought to the result screen</p>
+	  		 <img src="/static/site_images/documentation/sentiment_analysis/Picture8.png" alt="progress indicator" />
+	  		 <p>The results of the analysis are displayed</p>
+	  		 <img src="/static/site_images/documentation/sentiment_analysis/Picture9.png" alt="result screen" />
+	  		 <p>Above we have the results of sentiment analysis on a 100 document corpus.</p>
+	  		 <ul>
+			<li>The results in the first panel show the distribution of documents to sentiment results in <br> 
+			bar chart form.</li>
+			<li>The second panel shows the distribution in a pie chart format</li>
+			<li>The third panel shows the first 15 documents in the file, the first 10 words, <br> 
+				the sentiment integer result(0,1,2), and the string version of that result(neutral, <br> 
+				negative, positive) that the document has been assigned.</li>
+			<li>The fourth-panel shows.</li>
+			</ul>
+			<p>The user then has the option of downloading the results in a CSV file or saving a copy to storage</p>
+			<br>
+			<hr>
+	  		 <!--- end sentiment --->
+
+	  		 <!--- start extraction --->
+	  		 <h5 class="card-title" id=">Document Extraction">Document Extraction</h5>
+	  		 <hr>
+	  		 <img src="/static/site_images/documentation/document_extraction/Picture1.png" alt="use case diagram" />
+	  		 <p>The user goes to the homepage and selects Explore.</p>
+	  		 <img src="/static/site_images/documentation/document_extraction/Picture2.png" alt="home" />
+	  		 <p>The user chooses the required feature but must be registered and logged in to proceed.</p>
+	  		 <img src="/static/site_images/documentation/document_extraction/Picture3.png" alt="choose feature" />
+	  		 <p>The user selects the file type to upload.</p>
+	  		 <img src="/static/site_images/documentation/document_extraction/Picture4.png" alt="select file type" />
+	  		 <p>The user uploads files or proceeds to file preview and selection.</p>
+	  		 <img src="/static/site_images/documentation/document_extraction/Picture5.png" alt="upload file" />
+	  		 <p>The user views the uploaded files and selects the required ones.</p>
+	  		 <img src="/static/site_images/documentation/document_extraction/Picture6.png" alt="select file" />
+	  		 <p>The user selects extract on the image file that they want to extract text from. The page will<br>
+	  		  then show a processing screen until the data is returned from textract. </p>
+	  		 <img src="/static/site_images/documentation/document_extraction/Picture7.png" alt="preview data" />
+	  		 <p>After processing a preview of the extracted data as well as all previously extracted files and<br>
+	  		  any CSV files available the user receives a message that the text was extracted successfully and <br>
+	  		  the text has been added to a file and uploaded to the user's storage.</p>
+	  		 <img src="/static/site_images/documentation/document_extraction/Picture8.png" alt="progress indicator" />
+	  		 <p>The user can then either add the extracted text to a CSV file or return to the file page to <br>
+	  		  extract from a new image file.</p>
+	  		 <img src="/static/site_images/documentation/document_extraction/Picture9.png" alt="result screen" />
+	  		 <p>After adding the text to the CSV file the user is redirected to the feature selection page <br>
+	  		 with a successful confirmation message</p>
+	  		  <img src="/static/site_images/documentation/document_extraction/Picture10.png" alt="result screen" />
+			<br>
+			<hr>
+	  		 <!--- end extraction --->
+
+	  		 <!--- start summarisation --->
+	  		 <h5 class="card-title" id="Summarisation">Summarisation</h5>
+	  		 <hr>
+	  		  <img src="/static/site_images/documentation/summarisation/Picture1.png" alt="use case diagram" />
+	  		 <p>The user goes to the homepage and selects Explore.</p>
+	  		 <img src="/static/site_images/documentation/summarisation/Picture2.png" alt="home" />
+	  		 <p>The user chooses the required feature but must be registered and logged in to proceed.</p>
+	  		 <img src="/static/site_images/documentation/summarisation/Picture3.png" alt="choose feature" />
+	  		 <p>The user selects the file type to upload.</p>
+	  		 <img src="/static/site_images/documentation/summarisation/Picture4.png" alt="select file type" />
+	  		 <p>The user uploads files or proceeds to file preview and selection.</p>
+	  		 <img src="/static/site_images/documentation/summarisation/Picture5.png" alt="upload file" />
+	  		 <p>The user views the uploaded files and selects the required ones.</p>
+	  		 <img src="/static/site_images/documentation/summarisation/Picture6.png" alt="select file" />
+	  		 <p>The user selects the file and is shown a preview of the data as well as all CSV files available</p>
+	  		 <img src="/static/site_images/documentation/summarisation/Picture7.png" alt="preview data" />
+	  		 <p>The user selects the begin summarisation.</p>
+	  		 <img src="/static/site_images/documentation/summarisation/Picture8.png" alt="progress indicator" />
+	  		 <p>The user waits for the summarization process to finish then selects view results</p>
+	  		 <img src="/static/site_images/documentation/summarisation/Picture9.png" alt="result screen" />
+	  		 <p>Above we have the results of document summary on a 100 document corpus.</p>
+	  		 <ul>
+			<li>The results in the first panel show the summarization results in bar chart form.</li>
+			<li>The second panel shows the distribution in a pie chart format</li>
+			<li>The third panel shows the first 10 documents in the file, the first 15 words of each original<br> 
+				file, the character length, t the first 15 words of the summarization, and the new <br>
+			    summarised character length.</li>
+			
+			</ul>
+			<p>The user then has the option of downloading the results in a CSV file or saving a copy to storage</p>
+			<br>
+			<hr>
+	  		 <!--- end summarisation --->
+
+	  		 <!--- start entity recognition --->
+	  		 <h5 class="card-title" id="Entity Recognition">**Entity Recognition**</h5>
+	  		 <hr>
+	  		 <!--- end recognition --->
+
+	  		 <!--- start topic classification --->
+	  		 <h5 class="card-title" id="Topic Classification">** Topic Classification **</h5>
+	  		 <hr>
+	  		 <!--- end topic classificiation --->
+
+		    </p>
+		    
+		  </div>
+		</div>
+  
+</div><!--end--->
+	  	
 {% endblock content %}

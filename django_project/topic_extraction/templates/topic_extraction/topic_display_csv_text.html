@@ -28,7 +28,7 @@
       <div class="col-md-6">
         <div class="card mx-auto text-light bg-steel mb-2" style="max-width: 30rem;">
           <div class="card-body">
-            <div><p>You tell the algorithm how many topics you think there are. You can either use an informed estimate (e.g. results from a previous analysis), or simply trial-and-error. In trying different estimates, you may pick the one that generates topics to your desired level of interpretability, or the one yielding the highest statistical certainty. In order to begin the extraction process please highlight the total no of topics you would like to extract ftom the corpus below and click Topic extraction!</p></div>
+            <div><p>You need to tell the algorithm how many topics you think there are. You can either use an informed estimate (e.g. results from a previous analysis), or simply trial-and-error. In trying different estimates, you may pick the one that generates topics to your desired level of interpretability, or the one yielding the highest statistical certainty. In order to begin the extraction process please highlight the total no of topics you would like to extract ftom the corpus below and click Topic extraction!</p></div>
           <form method="post" action="{% url 'topic_extraction-topic_extraction' %}">
             {% csrf_token %}
             {{ form|crispy}}

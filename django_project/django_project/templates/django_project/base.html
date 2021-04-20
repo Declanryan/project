@@ -14,9 +14,9 @@
     <script src="https://kit.fontawesome.com/7fb0bcfffc.js" crossorigin="anonymous"></script>
 
     {% if title %}
-        <title>Doc Sort- {{ title }}</title>
+        <title>Docu-Sort {{ title }}</title>
     {% else %}
-        <title>Doc Sort</title>
+        <title>Docu-Sort</title>
     {% endif %}
 </head>
 <body>
@@ -30,17 +30,18 @@
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{% url 'blog-home' %}">Forum</a>
-              <a class="nav-item nav-link" href="{% url 'django_project-about' %}">Documentation</a>
+              <a class="nav-item nav-link" href="{% url 'django_project-about' %}" >Documentation</a>
             </div>
-            <!-- Navbar Right Side -->
+            <!-- Navbar Right Side {{ user.get_username }}-->
             <div class="navbar-nav">
               {% if user.is_authenticated and user.is_staff %}<!-- Check if is logged in and admin -->
                 <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                 <a class="nav-item nav-link" href="{% url 'admin:index' %}">Admin</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% elif user.is_authenticated %}<!-- Check if loggedin -->
-                <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-                <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+              <a class="nav-item nav-link" href="{% url 'profile' %}"><i class="fas fa-user"></i>{{ user.get_username }}</a>
+              <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'django_project-price_plan' %}">Plans</a>
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>

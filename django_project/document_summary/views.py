@@ -58,7 +58,7 @@ def check_summary(request):
                 result = summarize(sample_text, word_count = 10)
             # result = 'success'
             #form.summary = result
-            # form.save() # option to save to database
+            # form.save() # option to save to databasesession
             # print(result) testing
             
             messages.success(request, f'Text Summarization Complete!')
